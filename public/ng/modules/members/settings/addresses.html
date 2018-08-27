@@ -1,0 +1,54 @@
+<h2>Legg til ny adresse</h2>
+<div class="new-address-section-content">
+    <div class="row">
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+            <input type="text" id="new-password" ng-model="newAddress.street_address" placeholder="Adresse">
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
+            <input type="text" id="repeat-new-password" ng-model="newAddress.postal_code" placeholder="Postnummer">
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
+            <input type="text" id="repeat-new-password" ng-model="newAddress.city" placeholder="Poststed">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
+            <input type="text" id="old-password" ng-model="newAddress.first_name" placeholder="Fornvn">
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
+            <input type="text" id="new-password" ng-model="newAddress.last_name" placeholder="Etternavn">
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
+            <input type="text" id="repeat-new-password" ng-model="newAddress.email" placeholder="E-postfaktura">
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
+            <input type="text" id="repeat-new-password" ng-model="newAddress.phone" placeholder="Telefonnummer">
+        </div>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="col-sm-12 text-right feedback-container" ng-class="{'loading' : loading}">
+            <button type="button" class="barefilter-btn dark-blue" ng-click="addAddress()">Legg til</button>
+            <div class="feedback">Ny adresse er lagt til</div>
+            <div class="barefilter-loader xs"></div>
+        </div>
+    </div>
+</div>
+
+<div ng-if="hasAddresses()">
+    <h2>Mine adresser</h2>
+    <div class="addresses-section-content">
+        <div class="address" ng-repeat="address in addresses">
+            <p>
+                <strong>{{address.street_address}}</strong>, {{address.postal_code}} {{address.city}}</p>
+            <p>{{address.first_name}} {{address.last_name}} | {{address.phone}} | {{address.email}}</p>
+            <div class="controls pull-right">
+
+                <button type="button" class="delete" ng-click="deleteAddress(address)">
+                    <i class="fa fa-trash-o" aria-hidden="true"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<span class="clearfix"></span>

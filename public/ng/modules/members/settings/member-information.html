@@ -1,0 +1,36 @@
+<h2>Generell informasjon</h2>
+<div class="information-section-content">
+    <div class="row">
+        <div class="col-sm-6">
+            <input type="text" id="first-name" placeholder="Fornvn" ng-model="user.first_name">
+            <input type="text" id="last-name" placeholder="Etternavn" ng-model="user.last_name">
+        </div>
+        <div class="col-sm-6">
+            <input type="email" id="email" disabled placeholder="E-postfaktura" ng-model="user.email">
+            <input type="text" id="phone" placeholder="Telefonnummer" ng-model="user.phone">
+        </div>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="col-sm-6">
+            <label>Shipping addresss</label>
+            <select ng-model="shipping_id" ng-change="save()">
+                <option ng-repeat="address in addresses" value="{{address.id}}">{{address.street_address}}, {{address.postal_code}}</option>
+            </select>
+        </div>
+        <div class="col-sm-6">
+                <label>Billing addresss</label>
+            <select ng-model="billing_id" ng-change="save()">
+                <option ng-repeat="address in addresses" value="{{address.id}}">{{address.street_address}}, {{address.postal_code}}</option>
+            </select>
+        </div>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="col-sm-12 text-right feedback-container" ng-class="{'loading' : loading}">
+            <button type="button" class="barefilter-btn dark-blue" ng-click="save()">Lagre</button>
+            <div class="feedback">Endringene har blitt lagret.</div>
+            <div class="barefilter-loader xs"></div>
+        </div>
+    </div>
+</div>

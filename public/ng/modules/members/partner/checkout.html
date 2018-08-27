@@ -1,0 +1,30 @@
+<div class="barefilter-checkout" ng-if="hasAnything()" ng-class="{'order-placed': hasPlacedOrder}">
+    <h2>
+        <span>Subtotal: kr {{totals.total | number}},-</span>
+        <span> Discount: kr {{totals.discount | number}} ,- ( {{totals.rate}} % )</span>
+        <span> Total: kr {{totals.total - totals.discount | number}} ,-</span>
+    </h2>
+
+    <div class="checkout-section-content">
+        <!--<label>
+            <input type="checkbox" ng-model="acceptTos"> Jeg aksepterer Barefilter.no's
+            <a href='/salgs-og-leveringsbetingelser' target="_blank">Salgs- og leveringsbetingelser</a>.
+        </label>-->
+        <button type="submit" class="barefilter-btn dark-blue-inverted" ng-click="placeOrder()">Fortsett til betaling&nbsp;&nbsp;&nbsp;
+            <i class="fa fa-arrow-right"></i>
+        </button>
+        <div class="clearfix"></div>
+    </div>
+    <div class="checkout-feedback-section-content" ng-class="{'order-succeeded': hasSuccededPlacingOrder(), 'order-failed': hasFailedPlacingOrder(), 'placing-order': placingOrder}">
+        <div class="col-lg-12 loader-container">
+            <div class="barefilter-loader xs"></div>
+        </div>
+
+        <div class="col-lg-12 success-container">
+            <p>Ordren har blitt opprettet. Du vil motta en e-postfaktura i løpet av kort tid.</p>
+        </div>
+        <div class="col-lg-12 error-container">
+            <p>En feil oppstod ved opprettelse av ordre. Vennligst kontakt kundeservice.</p>
+        </div>
+    </div>
+</div>

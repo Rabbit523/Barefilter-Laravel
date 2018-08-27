@@ -1,0 +1,61 @@
+<section class="barefilter-search-results">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12 hidden-xs">
+                <div class="barefilter-jumbotron">
+                    <img src="/img/search-banner.jpg" alt="Filter">
+                    <div class="overlay">
+                        <div class="overlay-content text-center">
+                            <h1>Filtersøk</h1>
+                            <p>Søk med fritekst eller gjør et mer avansert søk ved å fylle ut bredde, høyde, dybde. Velg filterklasse
+                                for å gjør et mer kategorisert søk.</p>
+                            <div class="search-bar">
+                                <form id="search_through">
+
+                                    <input type="text" name="search-query" class="search-input" id="search_query" ng-model="q" ng-change="search()" placeholder="Fritekst">
+                                    <input type="text" name="search_depth" class="depth-input" id="search_depth" ng-model="width" ng-change="search()" placeholder="Bredde">
+                                    <input type="text" name="search_width" class="width-input" id="search_width" ng-model="height" ng-change="search()" placeholder="Høyde">
+                                    <input type="text" name="search_height" class="height-input" id="search_height" ng-model="length" ng-change="search()" placeholder="Dybde">
+                                    <select class="seach_category" ng-model="selectedCategory" name="search_category">
+                                        <option ng-repeat="category in categories" value="{{category.id}}">{{category.name}}</option>
+                                    </select>
+
+                                    <!--<button type="submit" class="btn search-button">
+                                        <i class="fa fa-search" aria-hidden="true"></i>
+                                    </button>-->
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12" ng-if="hasResults()">
+                <table class="rwd-table">
+                    <tr class="table-names">
+                        <th>VARENR.</th>
+                        <th>PRODUKT</th>
+                        <th>DIMENSJONER</th>
+                        <th>ANTALL POSER</th>
+                        <th>FILTERKLASSE</th>
+                        <th>PRIS</th>
+                        <th>KJØP</th>
+                    </tr>
+                    <tr ng-repeat="result in results">
+                        <td data-th="Varenummer">{{result.sku}}</td>
+                        <td data-th="Produkt" class="product">
+                            <img ng-src="{{result.images[0].url}}" alt="#">
+                            <span>{{result.name}}</span>
+                        </td>
+                        <td data-th="Dimensjoner">{{result.width}}x{{result.height}}x{{result.length}}</td>
+                        <td data-th="Antall poser">{{result.bags}}</td>
+                        <td data-th="Filterklasse">{{result.category.name}}</td>
+                        <td data-th="Pris">kr {{result.price}},- (inkl. mva.)</td>
+                        <td data-th="Kjop">
+                            <a ng-href="/produkt/{{result.handle}}" class="barefilter-btn light-green">Mer info</a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>

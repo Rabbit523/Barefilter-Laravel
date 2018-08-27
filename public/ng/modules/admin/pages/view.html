@@ -1,0 +1,30 @@
+<div class="transactions-history" ng-class="{'loading': loading}">
+    <div class="transactions-title">
+        <h1>Sider</h1>
+    </div>
+
+    <div class="transactions-body">
+        <section id="addresses" ng-if="hasPages()">
+            <h2>Sideoversikt</h2>
+            <div class="addresses-section-content" ng-repeat="p in pages">
+                <div class="address">
+                    <h4>
+                        <strong>{{p.name}}</strong>
+                    </h4>
+                    <p><strong>Publisert:</strong> {{p.created_at | date}}</p>
+                    <p><strong>Sist oppdatert:</strong> {{p.updated_at | date}}</p>
+
+                    <div class="controls pull-right">
+                        <button type="button" class="edit" ui-sref="page({handle: p.handle})">
+                            <i class="fa fa-edit" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div class="loader-container">
+        <div class="barefilter-loader md centered"></div>
+    </div>
+</div>

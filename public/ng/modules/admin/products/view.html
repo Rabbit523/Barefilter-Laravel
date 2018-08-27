@@ -1,0 +1,273 @@
+<style>
+    .bootstrap-tagsinput {
+        width: 100%;
+    }
+</style>
+<div class="transactions-history">
+    <div class="transactions-title">
+        <h1>Produkter</h1>
+        <input class="form-control ng-pristine ng-valid ng-empty ng-touched" type="text" placeholder="Søk etter varenummer, produktnavn, produktaktegori"
+            ng-model="searchQuery" ng-submit="search()" ng-keyup="$event.keyCode == 13 && search()">
+    </div>
+
+    <div class="transactions-body">
+        <section id="no-transactions" ng-if="!hasProducts()">
+            <h2>Produktoversikt</h2>
+            <div>
+                <img src="" alt="" />
+                <h3>Du har ingen produkter i nettbutikken</h3>
+                <p>Husk å opprette en kategori før du oppretter et produkt.
+                    <a href="#/categories">Opprett en kategori</a>.</p>
+                <button type="button" class="barefilter-btn light-green" ng-click="addNew()">Opprett produkt</button>
+
+            </div>
+        </section>
+        <section id="transactions-table" ng-if="hasProducts()">
+            <h2>Produktoversikt
+                <div class="pull-right">
+                    <a class="barefilter-btn light-green" ng-click="addNew()">Opprett produkt</a>
+                </div>
+            </h2>
+            <table>
+                <thead>
+                    <tr>
+                        <td style="width: 3%;">Nr.</td>
+                        <td style="width: 7%;">Varenr.</td>
+                        <td style="width: 25%;">Produktnavn</td>
+                        <td style="width: 8%;">Filter til</td>
+                        <td style="width: 10%;">Kategori</td>
+                        <td style="width: 10%;">Underkategori</td>
+                        <td style="width: 10%;">Sistekategori</td>
+                        <td style="width: 10%;">Dimensjoner</td>
+                        <td style="width: 5%;">Pris</td>
+                        <td style="width: 10%;">Rediger</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="product in products">
+                        <td>
+                            <p>{{product.id}}</p>
+                        </td>
+                        <td>{{product.sku}}</td>
+                        <td>{{product.name}}</td>
+                        <td>{{product.category.type.name}}</td>
+                        <td>{{getProductCategory(product)}}</td>
+                        <td>{{getProductSubCategory(product)}}</td>
+                        <td>{{getProductSubSubCategory(product)}}</td>
+                        <td>{{product.width}}x{{product.height}}x{{product.length}}</td>
+                        <td>kr {{product.price}},-</td>
+                        <td class="controls">
+                            </button>
+                            <button type="button" class="edit" ng-click="edit(product)">
+                                <i class="fa fa-pencil" aria-hidden="true"></i>
+                            </button>
+                            <button type="button" class="delete" ng-click="delete(product)">
+                                <i class="fa fa-times" aria-hidden="true"></i>
+                            </button>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+
+</div>
+
+<div class="modal fade" id="create-product-modal" tabindex="-1" role="dialog">
+    <div class="vertical-alignment-helper">
+        <div class="modal-dialog vertical-align-center" role="document">
+            <div class="modal-content">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <div class="modal-body">
+                    <div class="row">
+
+                        <div class="col-lg-12 col-md-12 transfer-description" ng-show="isViewing('fields')">
+                            <div class='transfer-title'>
+                                <h1 ng-if="isAddingNew">Opprett et produkt</h2>
+                                    <h1 ng-if="!isAddingNew">Rediger et produkt</h2>
+
+                            </div>
+                            <hr />
+                            <div class="btn-group">
+                                <input type="radio" id="contactChoice1" name="contact" value="1" ng-model="selectedProduct.is_Stock" style="height: auto;"
+                                    checked>
+                                <label for="contactChoice1" style="margin-right: 30px;color: green;">På lager</label>
+
+                                <input type="radio" id="contactChoice2" name="contact" value="0" ng-model="selectedProduct.is_Stock" style="height: auto;">
+                                <label for="contactChoice2" style="color: red;">Ikke på lager</label>
+                            </div>
+                            <hr />
+                            <section id='contact-information'>
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <h2>Varenummer</h2>
+                                        <p>Skriv inn varenummeret til produktet</p>
+                                        <input type="text" id="sku" placeholder="F.eks: 123456" ng-model="selectedProduct.sku">
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <h2>Produktnavn</h2>
+                                        <p>Skriv inn et detaljert produktnavn </p>
+                                        <input type="text" id="product-name" placeholder="F.eks: VTR 300 Kullfilter" ng-model="selectedProduct.name" ng-change="productCheck()">
+                                        <p ng-if="!canAddProduct">There is an existing product with that handle, try another one please.</p>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <h2>Produktpris</h2>
+                                        <p>Legg inn hovedpris for produktet</p>
+                                        <input type="text" id="one-time-transaction" placeholder="F.eks: 840" ng-model="selectedProduct.price">
+                                    </div>
+                                </div>
+                            </section>
+                            <hr />
+                            <section id='contact-information'>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <h2>Filter til</h2>
+                                        <p>Velg om filteret er til
+                                            <br>enebolig eller industribygg</p>
+                                        <select class="form-control" ng-model="tempCategory.selectedTypeId" ng-change="onTypeChange()">
+                                            <option value="1" ng-selected="{{1 == tempCategory.selectedTypeId}}">Enebolig</option>
+                                            <option value="2" ng-selected="{{2 == tempCategory.selectedTypeId}}">Industribygg</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-6" ng-show="is_mainCategory">
+                                        <h2>Kategori</h2>
+                                        <p>Velg kategori eller
+                                            <br>
+                                            <a ui-sref="categories">opprett en kategori</a>.</p>
+                                        <select class="form-control" ng-model="tempCategory.selectedCategoryId" ng-change="onCategoryChange()">
+                                            <option ng-repeat="cat in categories" value="{{cat.id}}" ng-selected="{{cat.id == tempCategory.selectedCategoryId}}">{{cat.name}}</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-6" ng-show="is_subCategory">
+                                        <h2>Underkategori</h2>
+                                        <p>Velg underkategori eller
+                                            <br>
+                                            <a ui-sref="categories">opprett en underkategori</a>.</p>
+                                        <select class="form-control" ng-model="tempCategory.selectedSubCategoryId" ng-change="onSubCategoryChange()">
+                                            <option ng-repeat="cat in subcategories" value="{{cat.id}}" ng-selected="{{cat.id == tempCategory.selectedSubCategoryId}}">{{cat.name}}</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-6" ng-show="is_subsubCategory">
+                                        <h2>Under underkategori</h2>
+                                        <p>Velg under underkategori eller
+                                            <br>
+                                            <a ui-sref="categories">opprett en underkategori</a>.</p>
+                                        <select class="form-control" ng-model="tempCategory.selectedSubSubCategoryId">
+                                            <option ng-repeat="cat in subsubcategories" value="{{cat.id}}" ng-selected="{{cat.id == tempCategory.selectedSubSubCategoryId}}">{{cat.name}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </section>
+                            <hr />
+                            <section id='contact-information'>
+                                <h2>Produktbeskrivelse</h2>
+                                <p>Beskriv produktet så godt som mulig</p>
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div id="product-description"></div>
+                                    </div>
+                                </div>
+                            </section>
+                            <hr />
+                            <section id='contact-information'>
+                                <h2>Produkt Tags</h2>
+                                <p>Skriv inn tags og trykk enter</p>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <input type="text" id="product-tags" style="width: 100%" />
+                                    </div>
+                                </div>
+                            </section>
+                            <hr />
+                            <section id='contact-information'>
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <h2>Bredde</h2>
+                                        <p>Skriv inn bredde på produktet</p>
+                                        <input type="text" id="product-width" placeholder="F.eks: 287" ng-model="selectedProduct.width">
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <h2>Høyde</h2>
+                                        <p>Skriv inn høyde på produktet</p>
+                                        <input type="text" id="product-height" placeholder="F.eks: 535" ng-model="selectedProduct.height">
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <h2>Dybde</h2>
+                                        <p>Skriv inn dybde på produktet</p>
+                                        <input type="text" id="product-depth" placeholder="F.eks: 287" ng-model="selectedProduct.length">
+                                    </div>
+                                </div>
+                            </section>
+                            <!--<hr />-->
+                            <section id='contact-information' ng-if="false">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <h2>Last opp produktbilde</h2>
+                                        <p>Husk å bruke et produktbilde som er klart og tydelig</p>
+                                        <input type="file" name="pic" accept="image/*">
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <h2>Last opp pdf fil</h2>
+                                        <p>Last opp pdf fil som du ønsker å tilknytte produktet</p>
+                                        <input type="file" name="pic" accept="image/*">
+                                    </div>
+                                </div>
+                            </section>
+
+                        </div>
+                        <div class="col-lg-12 col-md-12 transfer-description">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <h5 style="color: #32AEE3; font-size: 14px; text-transform: uppercase; font-family: 'Roboto', sans-serif;letter-spacing: 0;">Metatittel</h5>
+                                    <input type="text" style="width: 100%" id="product-metatitle" ng-model="selectedProduct.meta_title">
+                                </div>
+                                <div class="col-lg-12">
+                                    <h5 style="color: #32AEE3; font-size: 14px; text-transform: uppercase; font-family: 'Roboto', sans-serif;letter-spacing: 0;">Meta beskrivelse</h5>
+                                    <input type="text" style="width: 100%" id="product-metadescription" ng-model="selectedProduct.meta_description">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-12 col-md-12 transfer-description">
+                            <div class='transfer-title'>
+                                <h1>Administrer produktbilder</h2>
+                            </div>
+                            <hr />
+                            <section id="contact-information">
+                                <form action="/file-upload" class="dropzone no-margin" id="image-uploader">
+                                    <div class="fallback">
+                                        <input name="photo" type="file" multiple/>
+                                    </div>
+                                </form>
+                            </section>
+                            <h2 style="color: red; font-size: 14px;font-family: 'Roboto', sans-serif;letter-spacing: 0;">*Opprett produktet, deretter last opp produktbilde(r).</h2>
+                            <hr />
+                            <section id='contact-information'>
+                                <h2>Produkt images</h2>
+                                <div class="row">
+                                    <div class="col-sm-3" ng-repeat="image in selectedProduct.images">
+                                        <img ng-src="/assets/uploads/products/{{selectedProduct.id}}/{{image.uri}}" alt='product preview image' width="100%" />
+                                        <button class="barefilter-btn light-green" ng-click="deleteProductImage(image)">
+                                            <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </section>
+                            <hr />
+                            <div class="btn-group">
+                                <button ng-if="isAddingNew" type="submit" class="barefilter-btn light-green" ng-click="save()">Opprett produkt</button>
+                                <button ng-if="!isAddingNew" type="submit" class="barefilter-btn light-green" ng-click="update()">Rediger produkt</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+</div>

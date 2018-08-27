@@ -1,0 +1,45 @@
+<h2>Partner logo opplastingr</h2>
+<div class="information-section-content">
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="partner-logo">
+                <button type="button" class="barefilter-btn dark-blue" ng-click="uploadLogo()">Last opp partnerlogo</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="partner-logo-modal" tabindex="-1" role="dialog">
+    <div class="vertical-alignment-helper">
+        <div class="modal-dialog vertical-align-center" role="document">
+            <div class="modal-content">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 transfer-description">
+                            <div class='transfer-title'>
+                                <h1>Last opp partnerlogo</h2>
+                            </div>
+                            <hr />
+                            <section id="contact-information">
+                                <form action="/file-upload" class="dropzone no-margin" id="image-uploader">
+                                    <div class="fallback">
+                                        <input name="photo" type="file" multiple/>
+                                    </div>
+                                </form>
+                            </section>
+                            <hr />
+                            <button class="barefilter-btn dark-blue-full" style="float:right;" ng-click="logoUpload()">
+                                <i class="fa fa-upload" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+</div>

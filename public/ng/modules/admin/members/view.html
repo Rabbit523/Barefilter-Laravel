@@ -1,0 +1,195 @@
+<div class="transactions-history" ng-class="{'loading': loading}">
+    <div class="transactions-title">
+        <h1>Kunder</h1>
+        <input class="form-control" type="text" placeholder="Søk etter fornavn, etternavn eller e-postadresse" ng-model="searchQuery">
+    </div>
+
+    <div class="transactions-body">
+        <section id="no-transactions" ng-if="!hasMembers()">
+            <h2>Kundeoversikt</h2>
+            <div>
+                <img src="" alt="" />
+                <h3>Ingen kunder funnet.</h3>
+                <button type="button" class="barefilter-btn dark-blue" ng-click="addNew()">Opprett ny kunde</button>
+            </div>
+        </section>
+        <section id="addresses" ng-if="hasMembers()">
+            <h2>Kundeoversikt
+                <div class="pull-right">
+                    <a class="barefilter-btn light-green" ng-click="addNew()">Opprett ny kunde</a>
+                </div>
+            </h2>
+            <div class="addresses-section-content" ng-repeat="user in users">
+                <div class="address">
+                    <h4>
+                        <strong>{{user.first_name}} {{user.last_name}}</strong>
+                    </h4>
+                    <p><strong>E-post:</strong> {{user.email}}</p>
+                    <p><strong>Telefonnummer:</strong> {{getPhone(user)}}</p>
+                    <p><strong>Registreringsdato:</strong> {{user.created_at | date}}</p>
+
+                    <div class="controls pull-right">
+                        <button type="button" class="edit" ui-sref="member({id: user.id})">
+                            <i class="fa fa-eye" aria-hidden="true"></i>
+                        </button>
+                        <button type="button" class="delete" ng-click="delete(user)">
+                            <i class="fa fa-trash-o" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div class="loader-container">
+        <div class="barefilter-loader md centered"></div>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="create-product-modal" tabindex="-1" role="dialog">
+    <div class="vertical-alignment-helper">
+        <div class="modal-dialog vertical-align-center modal-lg" role="document">
+            <div class="modal-content">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <div class="modal-body">
+                    <div class="row">
+
+                        <div class="col-lg-12 col-md-12 transfer-description">
+                            <div class='transfer-title'>
+                                <h1>Create a member</h1>
+
+                            </div>
+                            <hr />
+                            <section id='contact-information'>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <h2>First name</h2>
+
+                                        <input type="text" id="sku" placeholder="F.eks: 123456" ng-model="member.first_name">
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <h2>Last name</h2>
+
+                                        <input type="text" id="product-name" placeholder="F.eks: VTR 300 Kullfilter" ng-model="member.last_name">
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <h2>Email</h2>
+
+                                        <input type="text" id="one-time-transaction" placeholder="F.eks: 840" ng-model="member.email">
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <h2>Phone</h2>
+
+                                        <input type="text" id="one-time-transaction" placeholder="F.eks: 840" ng-model="member.phone">
+                                    </div>
+                                </div>
+                            </section>
+                            <hr />
+                            <section id='contact-information'>
+                                <h2>Shipping Address</h2>
+                                <p>Beskriv produktet så godt som mulig</p>
+                                <div class="row">
+                                    <div class="col-lg-3">
+
+                                        <p>First name ...</p>
+                                        <input type="text" id="sku" placeholder="F.eks: 123456" ng-model="shipping.first_name">
+                                    </div>
+                                    <div class="col-lg-3">
+
+                                        <p>Last name .. </p>
+                                        <input type="text" id="product-name" placeholder="F.eks: VTR 300 Kullfilter" ng-model="shipping.last_name">
+                                    </div>
+                                    <div class="col-lg-3">
+
+                                        <p>Email ..</p>
+                                        <input type="text" id="one-time-transaction" placeholder="F.eks: 840" ng-model="shipping.email">
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <p>Phone ..</p>
+                                        <input type="text" id="one-time-transaction" placeholder="F.eks: 840" ng-model="shipping.phone">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-4">
+
+                                        <p>Street Address ...</p>
+                                        <input type="text" id="sku" placeholder="F.eks: 123456" ng-model="shipping.street_address">
+                                    </div>
+                                    <div class="col-lg-4">
+
+                                        <p>Post Code ... </p>
+                                        <input type="text" id="product-name" placeholder="F.eks: VTR 300 Kullfilter" ng-model="shipping.postal_code">
+                                    </div>
+                                    <div class="col-lg-4">
+
+                                        <p>City ...</p>
+                                        <input type="text" id="one-time-transaction" placeholder="F.eks: 840" ng-model="shipping.city">
+                                    </div>
+
+                                </div>
+                            </section>
+                            <hr />
+                            <section id='contact-information'>
+                                <h2>Billing Address</h2>
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" ng-model="useSame" style="height: initial;"> Use same
+                                    </label>
+                                </div>
+                                <div class="row" ng-if="!useSame">
+                                    <div class="col-lg-3">
+
+                                        <p>First name ...</p>
+                                        <input type="text" id="sku" placeholder="F.eks: 123456" ng-model="billing.first_name">
+                                    </div>
+                                    <div class="col-lg-3">
+
+                                        <p>Last name .. </p>
+                                        <input type="text" id="product-name" placeholder="F.eks: VTR 300 Kullfilter" ng-model="billing.last_name">
+                                    </div>
+                                    <div class="col-lg-3">
+
+                                        <p>Email ..</p>
+                                        <input type="text" id="one-time-transaction" placeholder="F.eks: 840" ng-model="billing.email">
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <p>Phone ..</p>
+                                        <input type="text" id="one-time-transaction" placeholder="F.eks: 840" ng-model="billing.phone">
+                                    </div>
+                                </div>
+                                <div class="row" ng-if="!useSame">
+                                    <div class="col-lg-4">
+
+                                        <p>Street Address ...</p>
+                                        <input type="text" id="sku" placeholder="F.eks: 123456" ng-model="billing.street_address">
+                                    </div>
+                                    <div class="col-lg-4">
+
+                                        <p>Post Code ... </p>
+                                        <input type="text" id="product-name" placeholder="F.eks: VTR 300 Kullfilter" ng-model="billing.postal_code">
+                                    </div>
+                                    <div class="col-lg-4">
+
+                                        <p>City ...</p>
+                                        <input type="text" id="one-time-transaction" placeholder="F.eks: 840" ng-model="billing.city">
+                                    </div>
+
+                                </div>
+                            </section>
+                            <hr />
+                            <button type="submit" class="barefilter-btn light-green" ng-click="save()">Opprett medlem</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+</div>
+<!-- /.modal -->

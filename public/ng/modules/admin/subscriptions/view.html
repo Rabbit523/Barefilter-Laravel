@@ -1,0 +1,99 @@
+<div class="transactions-history" ng-class="{'loading': loading}">
+    <div class="transactions-title">
+        <h1>Abonnementer</h1>
+    </div>
+
+    <div class="daterange-selector">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="sales-daterange-picker" placeholder="">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="transactions-body">
+        <section id="no-transactions" ng-if="!hasUpcomingOrders()">
+            <h2>Kommende abonnementer</h2>
+            <div>
+                <img src="" alt="" />
+                <h3>Ingen kommende abonnementer skal leveres</h3>
+            </div>
+        </section>
+        <section id="transactions-table" ng-if="hasUpcomingOrders()">
+            <h2>Kommende abonnementer</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <td style="width: 3%;">Ordrenr.</td>
+                        <td style="width: 8%;">Varenr.</td>
+                        <td style="width: 17%;">Produkt</td>
+                        <td style="width: 3%;">Antall</td>
+                        <td style="width: 18%;">Abonnement</td>
+                        <td style="width: 21%;">Leveringsadresse</td>
+                        <td style="width: 9%;">Kjøpsdato</td>
+                        <td style="width: 9%;">Leveringsdato</td>
+                        <td style="width: 10%;">Status</td>
+                        <td style="width: 5%;">Rediger</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="product in products">
+                        <td>
+                            <strong>{{product.order.id}}</strong>
+                        </td>
+                        <td>
+                            <strong>{{product.order_product.product.sku }}</strong>
+                        </td>
+                        <td>
+                            <strong>{{product.order_product.product.name }}</strong>
+                        </td>
+                        <td>
+                            <strong>{{product.order_product.amount}}</strong>
+                        </td>
+                        <td>
+                            <strong>{{product.order_product.subscription.name}}</strong>
+                        </td>
+                        <td>
+                            <p>
+                                <strong>{{product.order.shipping.first_name}} {{product.order.shipping.last_name }}</strong>
+                            </p>
+                            <p>{{product.order.shipping.street_address}}</p>
+                            <p>{{product.order.shipping.postal_code}} {{product.order.shipping.city}}</p>
+                        </td>
+                        <td>
+                            <strong>{{getPurchaseDate(product.order.created_at) | date }}</strong>
+                        </td>
+                        <td>
+                            <strong>{{getPurchaseDate(product.to_be_delivered_at) | date }}</strong>
+                        </td>
+
+                        <td>
+                            <strong ng-if="product.processed">Prosessert</strong>
+                            <strong ng-if="!product.processed">Ikke prosessert</strong>
+                        </td>
+                        <td class="controls">
+                            </button>
+                            <button type="button" class="delete" ng-click="deleteSubscription(product)">
+                                <i class="fa fa-times" aria-hidden="true"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+
+    <div class="loader-container">
+        <div class="barefilter-loader md centered"></div>
+    </div>
+</div>

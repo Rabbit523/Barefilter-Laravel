@@ -1,0 +1,106 @@
+<div class="barefilter-buildings" ng-class="{'creating-building': isCreatingBuilding(), 'creating-facility': isCreatingFacility(), 'no-buildings': !hasBuildings(), 'no-facilities':!hasFacilities()}">
+    <h2>1/2. Velg eller opprett kunde/bygg</h2>
+
+    <div class="no-building-section-content">
+        <div>
+            <img src="" alt="" />
+            <h3>Ingen kunder/bygg</h3>
+            <p>Du trenger å opprette en kunde eller et bygg</p>
+            <button type="button" class="barefilter-btn dark-blue" ng-click="startBuildingCreation()">Opprett kunde/bygg</button>
+        </div>
+    </div>
+    <div class="no-facility-section-content">
+        <div>
+            <img src="" alt="" />
+            <h3>{{selectedBuilding.name}} har ingen anlegg</h3>
+            <p>Start med å opprette et anlegg</p>
+            <button type="button" class="barefilter-btn dark-blue" ng-click="startFacilityCreation()">Opprett anlegg</button>
+        </div>
+    </div>
+    <div class="building-selection-section-content">
+          <div class="row">
+              <div class="col-sm-6">
+                  <select class="form-control"  ng-model="selectedBuildingId" ng-change="onBuildingSelection()">
+                      <option ng-repeat="building in buildings" value="{{building.id}}">{{building.name}}</option>
+                  </select>
+              </div>
+              <div class="col-sm-6" >
+                  <select class="form-control" ng-model="selectedFacilityId" ng-change="onFacilitySelection()">
+                      <option ng-repeat="facility in facilities" value="{{facility.id}}">{{facility.name}}</option>
+                  </select>
+              </div>
+          </div>
+    </div>
+
+    <div class="new-building-section-content">
+            <div class="row">
+                <div class="col-sm-12">
+                    <h4>1. KONTAKTPERSON</h4>
+                    <p>Hvem er kontaktperson for bygget?</p>
+                </div>
+                <div class="col-sm-6">
+                    <input type="text" id="first-name" placeholder="Fornavn" ng-model="newBuilding.first_name">
+                    <input type="text" id="last-name" placeholder="Etternavn" ng-model="newBuilding.last_name">
+                </div>
+                <div class="col-sm-6">
+                    <input type="email" id="email" placeholder="E-postfaktura" ng-model="newBuilding.email">
+                    <input type="text" id="phone" placeholder="Telefonnummer" ng-model="newBuilding.phone">
+                </div>
+            </div>
+            <hr />
+            <div class="row">
+                <div class="col-sm-12">
+                    <h4>2. LEVERINGSADRESSE</h4>
+                    <p>Generell informasjon</p>
+                </div>
+                <div class="col-sm-6">
+                    <input type="text" id="building-name" placeholder="Kundens/Byggets navn" ng-model="newBuilding.name">
+                    <input type="text" id="building-street-address" placeholder="Adresse" ng-model="newBuilding.street_address">
+                </div>
+                <div class="col-sm-6">
+                    <input type="text" id="building-postal-code" placeholder="Postnummer" ng-model="newBuilding.postal_code">
+                    <input type="text" id="building-city" placeholder="Poststed" ng-model="newBuilding.city">
+                </div>
+            </div>
+            <hr />
+            <div class="row">
+                <div class="col-sm-12 text-right feedback-container" ng-class="{'loading' : loading}">
+                    <button type="button" class="barefilter-btn dark-blue" ng-click="saveBuilding()">lagre</button>
+                    <div class="feedback">{{feedback}}</div>
+                    <div class="barefilter-loader xs"></div>
+                </div>
+            </div>
+    </div>
+
+    <div class="new-facility-section-content">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h3>Opprett Avdeling</h3>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <p>Skriv inn firmanavn og avdelingen bygget gjelder for</p>
+                </div>
+                <div class="col-sm-6">
+                    <input type="text" id="first-name" placeholder="Byggets avdelingsnavn" ng-model="newFacility.name">
+
+                </div>
+                <!--<div class="col-sm-6">
+                    <input type="email" id="email" disabled placeholder="Byggets firmanavn" ng-model="user.email">
+                </div>-->
+            </div>
+
+            <hr />
+            <div class="row">
+                <div class="col-sm-12 text-right feedback-container" ng-class="{'loading' : loading}">
+                        <button type="button" class="barefilter-btn dark-blue" ng-click="cancelFacilityCreation()">Avbryt</button>
+                    <button type="button" class="barefilter-btn dark-blue" ng-click="saveFacility()">Lagre</button>
+                    <div class="feedback">{{feedback}}</div>
+                    <div class="barefilter-loader xs"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,148 @@
+<div class="transactions-history" ng-class="{'loading': loading}">
+    <div class="transactions-title">
+        <h1>Oversikt</h1>
+    </div>
+
+    <div class="daterange-selector">
+        <div class="container-fluid">
+            <div class="row" style="margin-left: 0px; margin-right: 0px;">
+                <div class="overview-tab begin-tab" ng-click="selectDaterange('begin-tab')" ng-class="date == 'begin-tab'? 'tab-active': ''">Siden begynnelsen</div>
+                <div class="overview-tab year-tab" ng-click="selectDaterange('year-tab')" ng-class="date == 'year-tab'? 'tab-active': ''">År</div>
+                <div class="overview-tab lastmonth-tab" ng-click="selectDaterange('lastmonth-tab')" ng-class="date == 'lastmonth-tab'? 'tab-active': ''">Forrige måned</div>
+                <div class="overview-tab thismonth-tab" ng-click="selectDaterange('thismonth-tab')" ng-class="date == 'thismonth-tab'? 'tab-active': ''">Denne måneden</div>
+                <div class="overview-tab calender-tab" ng-click="selectDaterange('calender-tab')" ng-class="date == 'calender-tab'? 'tab-active': ''">
+                    <div style="float: left; padding-top: 10px;">Tilpasset</div>
+                    <div style="float: left; margin-left: 20px; ">
+                        <input type="text" class="form-control" id="dashboard-daterange-picker" placeholder="">
+                        <div class="input-group-addon overview">
+                            <i class="fa fa-calendar"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="dashboard-aggregates">
+        <div class="container-fluid" style="padding: 30px;">
+            <div class="row">
+                <div class="col-sm-3 text-center" style="width: 20%">
+                    <div class="subscription-overview">
+                        <div>kr {{aggregates.sales | number}} ,-</div>
+                        <div>Salg</div>
+                    </div>
+                    <div class="subscription-overview">
+                        <div>{{aggregates.orders | number}}</div>
+                        <div>Ordre totalt</div>
+                    </div>
+                    <div class="subscription-overview">
+                        <div>kr {{aggregates.discounts | number}} ,-</div>
+                        <div>Rabatt</div>
+                    </div>
+                    <div class="subscription-overview">
+                        <div>{{one_time  | number}}</div>
+                        <div>filterpakker kjøpt</div>
+                    </div>
+                    <div class="subscription-overview">
+                        <div>{{disposal | number}}</div>
+                        <div>filter på en gang kjøpt</div>
+                    </div>
+                    <div class="subscription-overview">
+                        <div>{{aggregates.total_subscriptions | number}}</div>
+                        <div>totale abonnementer</div>
+                    </div>
+                    <div class="subscription-overview">
+                        <div>{{aggregates.total_onetime_subscriptions | number}}</div>
+                        <div>totalt en abonnementer</div>
+                    </div>
+                    <div class="subscription-overview">
+                        <div>{{aggregates.total_twotime_subscriptions | number}}</div>
+                        <div>totalt to abonnementer</div>
+                    </div>
+                    <div class="subscription-overview">
+                        <div>{{aggregates.total_onetime_subscriptions + aggregates.total_twotime_subscriptions - aggregates.total_subscriptions
+                            | number}}</div>
+                        <div>slettede abonnementer</div>
+                    </div>
+                </div>
+                <div class="col-sm-9 text-center">
+                    <div style="height: 50px; width: 100%; border: 1px solid gainsboro; border-bottom: transparent;"></div>
+                    <div id="performance-chart" style="width: 100%; height: 410px;border: 1px solid gainsboro;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="transactions-body">
+        <section id="transactions-subscriptions-table">
+            <div class="daterange-selector" style="margin-top: 30px; min-height: 55px; background-color: #32aee3; float: left; width: 100%; display: table;">
+                <div style="text-transform: uppercase; float: left;padding: 20px 20px 20px 10px;color: white;">Produktliste for abonnement denne måneden</div>
+                <span style="float: right; margin-top: 9px; margin-right: 200px;">
+                    <input type="text" class="form-control" id="dashboard-product-daterange-picker" placeholder="">
+                    <span class="input-group-addon overview" style="height: 40px;">
+                        <i class="fa fa-calendar"></i>
+                    </span>
+                </span>
+            </div>
+
+            <table ng-if="hasSubscriptions()">
+                <thead>
+                    <tr>
+                        <td style="width: 5%;">Varenr.</td>
+                        <td style="width: 10%;">Bilde</td>
+                        <td style="width: 30%;">Produktnavn</td>
+                        <td style="width: 10%;">Filter til</td>
+                        <td style="width: 10%;">Kategori</td>
+                        <td style="width: 10%;">Totalt solgt</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="item in subscriptions">
+                        <td>{{item.sku}}</td>
+                        <td>
+                            <img ng-src="https://barefilter.no/assets/uploads/products/{{item.product_id}}/{{item.uri}}" alt='product preview image' width="80" />
+                        </td>
+                        <td>{{item.product_name}}</td>
+                        <td ng-if="item.type_id==1">Enebolig</td>
+                        <td ng-if="item.type_id==2">Industribygg</td>
+                        <td>{{item.category_name}}</td>
+                        <td>{{item.total | number}} stk.</td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </section>
+        <section id="transactions-table" ng-if="hasTopTen()">
+            <h2>Top 10 produkter</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <td style="width: 5%;">Varenr.</td>
+                        <td style="width: 10%;">Bilde</td>
+                        <td style="width: 30%;">Produktnavn</td>
+                        <td style="width: 10%;">Filter til</td>
+                        <td style="width: 10%;">Kategori</td>
+                        <td style="width: 10%;">Totalt solgt</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="item in top">
+                        <td>{{item.product.sku}}</td>
+                        <td>
+                            <img ng-src="{{item.product.images[0].url}}" alt='product preview image' width="80" />
+                        </td>
+                        <td>{{item.product.name}}</td>
+                        <td>{{item.product.category.type.name}}</td>
+                        <td>{{item.product.category.name}}</td>
+                        <td>{{item.total | number}} stk.</td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+    <div class="loader-container">
+        <div class="barefilter-loader md centered"></div>
+    </div>
+</div>

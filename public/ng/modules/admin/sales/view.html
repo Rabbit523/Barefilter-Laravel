@@ -1,0 +1,138 @@
+<div class="transactions-history" ng-class="{'loading': loading}">
+    <div class="transactions-title">
+        <h1>Ordrer</h1>
+    </div>
+
+    <div class="daterange-selector">
+        <div class="container-fluid" ng-show="!searching">
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="sales-daterange-picker" placeholder="">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <select class="form-control" ng-model="selectedSubscription" ng-change="reload()">
+                            <option ng-repeat="subscription in subscriptions" ng-value="{{subscription.id}}">{{subscription.name}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-6 text-right">
+                    <div class="form-group">
+                        <button class="barefilter-btn light-blue-full" ng-click="searching = true">
+                            <i class="fa fa-search" aria-hidden="true"></i>
+                        </button>
+                        <button class="barefilter-btn dark-blue-full" ng-click="exportToExcel()">
+                            <i class="fa fa-file-excel-o" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <p>{{orders.length | number}} ordre ble lagt inn fra {{getStartDate() | date}} til {{getEndDate() | date}}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid" ng-show="searching">
+            <div class="row">
+                <div class="col-sm-6">
+                        <input class="form-control" type="text" placeholder="Søk etter varenummer" ng-model="searchQuery">
+                </div>
+                <div class="col-sm-6 text-right">
+                    <div class="form-group">
+                        <button class="barefilter-btn light-blue-full" ng-click="searching = false">
+                            <i class="fa fa-arrow-left" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="transactions-body">
+        <section id="no-transactions" ng-if="!hasOrders()">
+            <h2>ORDREHISTORIKK</h2>
+            <div>
+                <img src="" alt="" />
+                <h3>Bruk søkefunksjonen for å<br> finne riktig ordrenummer.</h3>
+            </div>
+        </section>
+        <section id="transactions-table" ng-if="hasOrders()">
+            <h2>ORDREHISTORIKK</h2>
+            <table>
+                <thead>
+                    <tr>
+                      <td style="width: 10%;">Ordrenr.</td>
+                      <td style="width: 10%;">Betaling</td>
+                        <td style="width: 35%;">Oversikt</td>
+                        <td style="width: 10%;">Totalpris</td>
+                        <td style="width: 10%;">Rabatt</td>
+                        <td style="width: 20%;">Leveringsadresse</td>
+                        <td style="width: 10%;">Ordredato</td>
+                        <td style="width: 10%;">Status</td>
+                        <td style="width: 15%;">Handling</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="order in orders">
+                        <td>
+                            <p><strong>{{order.identifier}}</strong></p>
+                        </td>
+                        <td>
+                            <p><strong>{{(order.payment_method_id === 1) ? "Netaxept" : "Faktura"}}</strong></p>
+                        </td>
+                        <td>
+                            <p><strong>Varer:</strong> {{order.products.length}}</p>
+                            <hr />
+                            <div ng-repeat="orderProduct in order.products">
+                                <p>{{orderProduct.product.name}}
+                                    <strong>({{orderProduct.subscription.name}})</strong>, {{orderProduct.amount}} stk. </p>
+                            </div>
+                        </td>
+                        <td>
+                            <strong>kr {{order.total | number }},-</strong>
+                        </td>
+                        <td>
+                            <strong>kr {{order.discount | number }},-</strong>
+                        </td>
+                        <td>
+                            <p>
+                                <strong>{{order.shipping.first_name}} {{order.shipping.last_name }}</strong>
+                            </p>
+                            <p>{{order.shipping.street_address}}</p>
+                            <p>{{order.shipping.postal_code}} {{order.shipping.city}}</p>
+                        </td>
+                        <td>
+                            <strong>{{getPurchaseDate(order.created_at) | date }}</strong>
+                        </td>
+
+                        <td>
+                            <strong ng-if="order.status === -1"> Betaling feilet</strong>
+                            <strong ng-if="order.status === 0"> Ikke prosessert</strong>
+                            <strong ng-if="order.status === 1"> Ikke betalt</strong>
+                            <strong ng-if="order.status === 2"> Betalt</strong>
+                            <strong ng-if="order.status === 3"> Klar for levering</strong>
+                            <strong ng-if="order.status === 4"> Levering feilet</strong>
+                        </td>
+                        <td>
+                            <button type="button" class="barefilter-btn green" ng-click="delete(order)">Slett</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+
+    <div class="loader-container">
+        <div class="barefilter-loader md centered"></div>
+    </div>
+</div>

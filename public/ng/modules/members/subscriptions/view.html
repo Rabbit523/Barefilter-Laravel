@@ -1,0 +1,117 @@
+<div class="transactions-history" ng-class="{'loading': loading}">
+    <div class="transactions-title">
+        <h1>Mine filterabonnement</h1>
+    </div>
+
+    <div class="transactions-body">
+        <section id='settings' ng-if="false">
+            <div class="row">
+                <div class="col-lg-5 col-md-5 col-sm-5">
+                    <h3>1. velg Kunde</h3>
+                    <p>Velg kunde deretter vil alle bygg for denne kunden vises</p>
+                    <select class="form-control">
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                    </select>
+                </div>
+                <div class="col-lg-5 col-md-5 col-sm-5">
+                    <h3>2. velg avdeling</h3>
+                    <p>Velg avdelingen i bygget filteret gjelder for</p>
+                    <select class="form-control">
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+
+
+        <section id="no-transactions" ng-if="!hasTransactions()">
+            <h2>Mine filterabonnement</h2>
+            <div>
+                <img src="" alt="" />
+                <h3>Du har ingen filterabonnement</h3>
+                <p>Utforsk vår nettbutikk med et stort utvalg av ventilasjonsfilter. Finner du ikke det du leter etter kan du
+                    alltid kontakte oss for kjøp</p>
+                <button type="button" class="barefilter-btn light-green">Go til nettbutikken</button>
+            </div>
+        </section>
+        <section id="transactions-table" ng-if="hasTransactions()">
+            <h2>Mine filterabonnement</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <td style="width: 10%;">Ordrenummer</td>
+                        <td style="width: 30%;">Produktnavn</td>
+                        <!--<td style="width: 18%;">Kontaktinfomrasjon</td>-->
+                        <td style="width: 18%;">Leveringsadresse</td>
+                        <td style="width: 5%;">Antall filter</td>
+                        <td style="width: 18%;">Neste levering</td>
+                        <td style="width: 5%;">Innstillinger</td>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="p in products">
+                        <td>
+                            <span>{{p.order_identifier}}</span>
+                        </td>
+                        <td class='product'>
+                            <img ng-src='{{p.images[0].url}}' alt='product preview image' />
+                            <div>
+                                <p>{{p.name}}</p>
+                                <span>{{p.short_description}}</span>
+                                <br />
+                                <span>{{p.size}}</span>
+                                <br />
+                                <span>Vare nr: {{p.id}}</span>
+                                <br />
+                            </div>
+                        </td>
+                        <!--<td>
+                            <p>
+                                <strong>{{p.shipping.first_name}}</strong>
+                            </p>
+                            <p>+64674747476</p>
+                            <p>ola@normann.no</p>
+                        </td>-->
+                        <td>
+                            <p>
+                                <strong>{{p.shipping.first_name}} {{p.shipping.last_name}}</strong>
+                            </p>
+                            <p>{{p.shipping.street_address}}</p>
+                            <p>{{p.shipping.postal_code}} {{p.shipping.city}}</p>
+                        </td>
+                        <td>
+                            <strong>{{p.amount}} stk.</strong>
+                        </td>
+                        <td>
+                            <p ng-if="p.subscription_id === 2">{{p.second_delivery_date | date}}</p>
+                            <p ng-if="p.subscription_id === 3">{{p.first_delivery_date | date}}</p>
+                            <p ng-if="p.subscription_id === 3">{{p.second_delivery_date | date}}</p>
+                        </td>
+                        <td class="controls">
+                            <!--<button type="button" class="edit" data-toggle="modal" data-target="#edit-subscription-modal">
+                                <i class="fa fa-pencil" aria-hidden="true"></i>
+                            </button>-->
+                            <button type="button" class="delete">
+                                <i class="fa fa-times" aria-hidden="true" ng-click="cancelSubscription(p)"></i>
+                            </button>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+    <div class="loader-container">
+        <div class="barefilter-loader md centered"></div>
+    </div>
+</div>

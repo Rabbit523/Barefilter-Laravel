@@ -1,0 +1,683 @@
+<div ng-if="hasProducts() && !loading" class="row">
+    <div class="col-lg-9 checkout-information">
+
+        <section id="barefilter-cart-products" ng-if="isStep(1)">
+            <h3>
+                <ul class="list-inline">
+                    <li>
+                        <i style="color: #fff;"  class="fa fa-check-circle"></i>&nbsp;Gratis frakt over kr {{shipping_config}},-&nbsp;&nbsp;&nbsp;&nbsp;
+                    </li>
+                    <li>
+                        <i style="color: #fff;" class="fa fa-check-circle"></i>&nbsp;30 dager returrett&nbsp;&nbsp;&nbsp;&nbsp;</li>
+                    <li>
+                        <i style="color: #fff;" class="fa fa-check-circle"></i>&nbsp;Eurovent godkjent produsent&nbsp;&nbsp;&nbsp;&nbsp;</li>
+                    <li>
+                        <i style="color: #fff;" class="fa fa-check-circle"></i>&nbsp;Norskproduserte filter &nbsp;&nbsp;&nbsp;&nbsp;</li>
+                    <li>
+                        <i style="color: #fff;" class="fa fa-check-circle"></i>&nbsp;Rask Kundeservice</li>
+                </ul>
+            </h3>
+            <h2>1/5. Din handlekurv</h2>
+            <div style="overflow-x:auto;" class="table-form">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <td style='width: 40%;'>Produkt(er)</td>
+                            <td style='width: 10%;'>Pris</td>
+                            <td style='width: 35%;'>Type abonnement</td>
+                            <td style='width: 10%;'>Antall</td>
+                            <td style='width: 5%;'>Slett</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="item in cart">
+                            <td class='product'>
+                                <img ng-src='{{item.images[0].url}}' alt='product preview image' />
+                                <div>
+                                    <p>{{item.name}}</p>
+                                    <span>Varenr: {{item.sku}}</span>
+                                    <span>{{item.short_description}}</span>
+                                </div>
+                            </td>
+                            <td class="product-price" ng-class="{'discount': hasDiscount(item)}">
+                                <span>kr {{item.total * item.price | number}} ,-</span>
+                                <span>kr {{item.cost | number}} ,-</span>
+                            </td>
+                            <td>
+                                <select class="form-control" ng-model="item.subscription_id" ng-model="data.model" ng-change="updateTotals(item)">
+                                    <option ng-repeat="subscription in subscriptions" value="{{subscription.id}}">{{subscription.name}}</option>
+                                </select>
+                            </td>
+                            <td>
+                                <input type="number" class="form-control" ng-value="{{item.total}}" ng-model="item.total" ng-change="updateTotals(item)"
+                                />
+                            </td>
+                            <td>
+                                <i class="fa fa-times delete" aria-hidden="true" ng-click="deleteFromCart(item)"></i>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="list-form">
+                <div>
+                    <div ng-repeat="item in cart" class="row" style="margin: 10px 10px 5px 10px; padding: 20px 0px; background-color: white;box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16), 0 2px 10px 0 rgba(0,0,0,0.12);">
+                        <div class="col-xs-2">
+                            <img class="product-image-mobile" ng-src='{{item.images[0].url}}'></img>
+                        </div>
+                        <div class="col-xs-9" style="margin-left: 20px;">
+                            <div style="color: #2568ae;font-size: 15px;font-weight: bold;">{{item.name}}</div>
+                            <p style="color: gray;">Varenr: {{item.sku}}</p>
+                            <div class="select-subscription">
+                                <span>
+                                    <select class="form-control" ng-model="item.subscription_id" ng-model="data.model" ng-change="updateTotals(item)">
+                                        <option ng-repeat="subscription in subscriptions" value="{{subscription.id}}">{{subscription.name}}</option>
+                                    </select>
+                                </span>
+                                <span>
+                                    <input type="number" class="form-control" ng-value="{{item.total}}" ng-model="item.total" ng-change="updateTotals(item)"
+                                    />
+                                </span>
+                            </div>
+                            <div class="product-price" ng-class="{'discount': hasDiscount(item)}">
+                                <span>kr {{item.total * item.price | number}} ,-</span>
+                                <span>kr {{item.cost | number}} ,-</span>
+                            </div>
+                            <i class="fa fa-times delete" aria-hidden="true" ng-click="deleteFromCart(item)" style="position: absolute; top: 0px; right: 0px;color: gainsboro;font-size: 20px;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="discount" ng-if="isStep(1)">
+            <h2>Har du rabattkode?</h2>
+            <div class="checkout-section-content" style="border-left: 1px solid lightgray; border-right: 1px solid lightgray;">
+                <div class="form-inline">
+                    <div class="form-group">
+                        <input type="text" id="discount-code" placeholder="Tast inn rabattkode">
+                    </div>
+                    <button type="submit" class="barefilter-btn dark-blue" ng-click="getDiscountForCode()">Aktiver</button>
+                </div>
+                <p ng-if="redeemedCode" class="text-center">Rabatt: {{totalDiscount}} %</p>
+            </div>
+        </section>
+        <section id="confirmation" ng-if="isStep(1)" class="desktop">
+            <div class="checkout-section-content">
+                <button type="submit" class="barefilter-btn dark-blue-inverted" ng-click="next()">Fortsett til leveringsadresse&nbsp;&nbsp;&nbsp;
+                    <i class="fa fa-arrow-right"></i>
+                </button>
+            </div>
+        </section>
+
+
+        <section id="information" ng-if="isStep(2)">
+            <h2>2/5. Leveringsadresse</h2>
+            <div class="checkout-section-content" ng-if="isCreatingAddresses">
+                <div class="col-md-12" style="margin-bottom: 10px;">
+                    <div class="col-lg-12" ng-if="!accountAvailable || !isValidEmail(shippingAddress.email)">
+                        <br>
+                        <input type="checkbox" style="width: 20px; height: 20px;" class="invoiceAddress" ng-value="0" ng-model="extras.guest">
+                        <b>Gjestekonto:</b> For deg som ikke ønsker å logge inn eller opprette en konto.
+                    </div>
+                </div>
+                <h4 style="margin-left: 50px;">
+                    <strong>Leveringsadresse:</strong>
+                </h4>
+                <div class="col-lg-6">
+                    <div class="col-lg-12">
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <input type="text" id="first-name" ng-model="shippingAddress.first_name" ng-change="onShippingAddressChange()" placeholder="Fornavn*">
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <input type="text" id="last-name" ng-model="shippingAddress.last_name" ng-change="onShippingAddressChange()" placeholder="Etternavn*">
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="col-lg-12 col-md-12 col-sm-12">
+                            <input type="text" id="address" ng-model="shippingAddress.street_address" ng-change="onShippingAddressChange()" placeholder="Adresse*">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="col-lg-12">
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <input type="text" id="phone" ng-model="shippingAddress.phone" ng-change="onShippingAddressChange()" placeholder="Telefon*">
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <input type="text" id="email" ng-model="shippingAddress.email" ng-change="onShippingAddressChange()" placeholder="E-post*" ng-blur="verifyAccountAvailability()">
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <input type="text" id="zipcode" ng-model="shippingAddress.postal_code" ng-change="onShippingAddressChange()" placeholder="Postnummer*"
+                                ng-blur="loadShippingCity()">
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <input type="text" id="zipplace" ng-model="shippingAddress.city" ng-change="onShippingAddressChange()" placeholder="Poststed*">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="col-lg-12">
+                        </br>
+                        <input type="checkbox" style="width: 20px; height: 20px;" class="invoiceAddress" ng-value="0" ng-model="addresses.same">Fakturaadresse er det samme som over
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                <h4 style="margin-left: 50px;" ng-if="!addresses.same">
+                    <strong>Faktureringsadresse:</strong>
+                </h4>
+                <div class="col-lg-6" ng-if="!addresses.same">
+                    <div class="col-lg-12">
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <input type="text" id="first-name" ng-model="billingAddress.first_name" placeholder="Fornavn*">
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <input type="text" id="last-name" ng-model="billingAddress.last_name" placeholder="Etternavn*">
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="col-lg-12 col-md-12 col-sm-12">
+                            <input type="text" id="address" ng-model="billingAddress.street_address" placeholder="Adresse*">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6" ng-if="!addresses.same">
+                    <div class="col-lg-12">
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <input type="text" id="phone" ng-model="billingAddress.phone" placeholder="Telefon*">
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <input type="text" id="email" ng-model="billingAddress.email" placeholder="E-post*">
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <input type="text" id="zipcode" ng-model="billingAddress.postal_code" placeholder="Postnummer*" ng-blur="loadBillingCity()">
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <input type="text" id="zipplace" ng-model="billingAddress.city" placeholder="Poststed*">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div ng-if="!isCreatingAddresses">
+                <div class="checkout-section-content" ng-if="!isEditedShippingAddress || !isEditedBillingAddress">
+                    <div class="col-lg-6">
+                        <div class="shipping-address" ng-if="!isEditedShippingAddress">
+                            <h4>
+                                <strong>Leveringsadresse</strong>
+                            </h4>
+                            <p>
+                                <b>Fornavn:&nbsp;</b>{{shippingAddress.first_name}}</p>
+                            <p>
+                                <b>Etternavn:&nbsp;</b> {{shippingAddress.last_name}}</p>
+                            <p>
+                                <b>Phone: &nbsp;</b>{{shippingAddress.phone}}</p>
+                            <p>
+                                <b>E-post:&nbsp;</b>{{shippingAddress.email}}</p>
+                            <p>
+                                <b>Leveringsadresse: &nbsp;</b>{{shippingAddress.street_address}}</p>
+                            <p>
+                                <b>Postnummer:&nbsp;</b>{{shippingAddress.postal_code}}</p>
+                            <p>
+                                <b>Poststed&nbsp;</b>{{shippingAddress.city}}</p>
+                            <i class="fa fa-edit delete" aria-hidden="true" ng-click="editShippingAddress()" style="position: absolute; top: 10px; right: 10px;"></i>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="shipping-address" ng-if="!isEditedBillingAddress">
+                            <h4>
+                                <strong>Faktureringsadresse</strong>
+                            </h4>
+                            <p>
+                                <b>Fornavn:&nbsp;</b>{{billingAddress.first_name}}</p>
+                            <p>
+                                <b>Etternavn:&nbsp;</b> {{billingAddress.last_name}}</p>
+                            <p>
+                                <b>Phone: &nbsp;</b>{{billingAddress.phone}}</p>
+                            <p>
+                                <b>E-post:&nbsp;</b>{{billingAddress.email}}</p>
+                            <p>
+                                <b>Leveringsadresse: &nbsp;</b>{{billingAddress.street_address}}</p>
+                            <p>
+                                <b>Postnummer:&nbsp;</b>{{billingAddress.postal_code}}</p>
+                            <p>
+                                <b>Poststed&nbsp;</b>{{billingAddress.city}}</p>
+                            <i class="fa fa-edit de" aria-hidden="true" ng-click="editBillingAddress()" style="position: absolute; top: 10px; right: 10px;"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="checkout-section-content" ng-if="isEditedShippingAddress || isEditedBillingAddress">
+                    <div class="col-lg-12 col-md-12 col-sm-12" ng-if="isEditedShippingAddress">
+                        <h4 style="margin-left: 50px;">
+                            <strong>Leveringsadresse:</strong>
+                        </h4>
+                        <div class="col-lg-6">
+                            <div class="col-lg-12">
+                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <input type="text" id="first-name" ng-model="shippingAddress.first_name" ng-change="onShippingAddressChange()" placeholder="Fornavn*">
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <input type="text" id="last-name" ng-model="shippingAddress.last_name" ng-change="onShippingAddressChange()" placeholder="Etternavn*">
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="col-lg-12 col-md-12 col-sm-12">
+                                    <input type="text" id="address" ng-model="shippingAddress.street_address" ng-change="onShippingAddressChange()" placeholder="Adresse*">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="col-lg-12">
+                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <input type="text" id="phone" ng-model="shippingAddress.phone" ng-change="onShippingAddressChange()" placeholder="Telefon*">
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <input type="text" id="email" ng-model="shippingAddress.email" ng-change="onShippingAddressChange()" placeholder="E-post*"  ng-blur="verifyAccountAvailability()">
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <input type="text" id="zipcode" ng-model="shippingAddress.postal_code" ng-change="onShippingAddressChange()" placeholder="Postnummer*" ng-blur="loadShippingCity()">
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <input type="text" id="zipplace" ng-model="shippingAddress.city" ng-change="onShippingAddressChange()" placeholder="Poststed*">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12 col-md-12 col-sm-12" ng-if="isEditedBillingAddress">
+                        <h4 style="margin-left: 50px;">
+                            <strong>Faktureringsadresse</strong>
+                        </h4>
+                        <div class="col-lg-6">
+                            <div class="col-lg-12">
+                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <input type="text" id="first-name" ng-model="billingAddress.first_name" placeholder="Fornavn*">
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <input type="text" id="last-name" ng-model="billingAddress.last_name" placeholder="Etternavn*">
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="col-lg-12 col-md-12 col-sm-12">
+                                    <input type="text" id="address" ng-model="billingAddress.street_address" placeholder="Adresse*">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="col-lg-12">
+                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <input type="text" id="phone" ng-model="billingAddress.phone" placeholder="Telefon*">
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <input type="text" id="email" ng-model="billingAddress.email" placeholder="E-post*">
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <input type="text" id="zipcode" ng-model="billingAddress.postal_code" placeholder="Postnummer*" ng-blur="loadBillingCity()">
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <input type="text" id="zipplace" ng-model="billingAddress.city" placeholder="Poststed*">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="confirmation" ng-if="isStep(2)" class="desktop">
+            <div class="checkout-section-content" ng-if="accountAvailable && isValidEmail(shippingAddress.email) && !isLoggedIn() && !extras.guest">
+                <div class="col-lg-12 text-center">
+                    <p style="margin-left: 0px; margin-right: 0px; font-size: 14px;">
+                        <strong>Notat:</strong> Vi vil opprette en konto til deg med
+                        <strong>{{shippingAddress.email}}</strong> hvor passordet blir tilsendt på e-post.</p>
+                </div>
+            </div>
+            <div class="checkout-section-content" ng-if="!accountAvailable && !extras.guest">
+                <div class="col-lg-12 text-center">
+                    <p style="font-size: 14px;">
+                        <strong>Notat:</strong> Det er allerede en bruker registrert med e-posten
+                        <strong>{{shippingAddress.email}}</strong>.
+                        <a href="logg-inn">Logg inn for å fortsette</a>. Har du glemt passordet?
+                        <a href="passord">Tilbakestill passordet her</a>.
+                    </p>
+                </div>
+            </div>
+
+            <div class="checkout-section-content">
+                <button type="submit" class="barefilter-btn dark-blue-inverted" ng-if="canMoveToShippingDetails()" ng-click="next()">Fortsett til fraktmetode&nbsp;&nbsp;&nbsp;
+                    <i class="fa fa-arrow-right"></i>
+                </button>
+                <button type="submit" class="barefilter-btn dark-blue-inverted" style="margin-right: 10px; border-color: #ffffff; background: #ffffff; color: #16417E;"
+                    ng-click="back()">Tilbake&nbsp;&nbsp;&nbsp;
+                    <i class="fa fa-arrow-left"></i>
+                </button>
+            </div>
+        </section>
+
+
+        <section id="shipping-method" ng-if="isStep(3)">
+            <h2>3/5. Velg fraktmetode</h2>
+            <div class="checkout-section-content">
+                <div class="row">
+
+                    <div class="col-lg-12" ng-repeat="method in shippingMethods">
+                        <!--<h4></h4>-->
+                        <input type="radio" name="shipping" style="width: 20px; height: 20px;" class="invoiceAddress" ng-checked="method.handle === 'helthjem_mypack'"
+                            ng-click="selectShipping(method)">{{method.name}}
+                        <b ng-if="!hasFreeShipping()">kr {{method.price || number}},-</b>
+                        <b ng-if="hasFreeShipping()">Gratis frakt</b>
+                    </div>
+
+                </div>
+
+                <div class="row" ng-if="needsToSelectServicePartner()">
+                    <hr />
+                    <div class="col-lg-12 loader-container" ng-if="loadingServicePartners">
+                        <div class="barefilter-loader xs centered"></div>
+                    </div>
+
+                    <div class="col-lg-6" ng-repeat="partner in servicePartners">
+                        <!--<h4></h4>-->
+                        <input type="radio" name="service-partner" style="width: auto;" class="invoiceAddress" ng-click="selectServicePartner(partner)">{{partner.name}}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <hr />
+                    <div class="col-lg-6">
+                        <div class="form-group" ng-if="needsToAddCompanyInfo()">
+                            <input type="text" id="company-name" ng-model="company.name" placeholder="Firmanavn" class="form-control">
+                        </div>
+                        <div class="form-group" ng-if="needsToAddCompanyInfo()">
+                            <input type="number" id="company-name" ng-model="company.number" placeholder="Organisasjonsnummer" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <textarea id="notes" class="form-control" ng-model="notes.text" rows="5" placeholder="Merknader"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="confirmation" ng-if="isStep(3)" class="desktop">
+            <div class="checkout-section-content">
+                <button type="submit" class="barefilter-btn dark-blue-inverted" ng-if="hasValidShippingMethod()" ng-click="next()">Fortsett til betalingsmåte&nbsp;&nbsp;&nbsp;
+                    <i class="fa fa-arrow-right"></i>
+                </button>
+                <button type="submit" class="barefilter-btn dark-blue-inverted" style="margin-right: 10px; border-color: #ffffff; background: #ffffff; color: #16417E;"
+                    ng-click="back()">Tilbake&nbsp;&nbsp;&nbsp;
+                    <i class="fa fa-arrow-left"></i>
+                </button>
+            </div>
+        </section>
+
+        <section id="barefilter-payment-methods" ng-if="isStep(4)">
+            <h2>4/5. Velg betalingsmåte</h2>
+            <div style="overflow-x:auto;" class="paymentMethods_desktop">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <td ng-repeat="method in paymentMethods">
+                                <div class="col-lg-12 col-md-12">
+                                    <div class="payment-method">
+                                        <img ng-src="{{method.image}}" alt="payment method logo" />
+                                        <h4>{{method.name}}</h4>
+                                        <p>{{method.description}}</p>
+                                        <input type="radio" style="width: 20px; height: 20px;" name="payment" ng-checked="method.handle === 'netaxept'" ng-value="{{method.handle}}"
+                                            ng-click="selectPayment(method)">
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div style="overflow-x:auto;" class="paymentMethods_mobile">
+                <div class="col-lg-12 col-md-12" ng-repeat="method in paymentMethods">
+                    <div class="payment-method" style="padding-top: 20px; padding-bottom: 20px; background-color: white; margin-top: 20px;margin-bottom: 20px;">
+                        <img ng-src="{{method.image}}" alt="payment method logo" style="margin-top: 20px;margin-bottom: 20px;" />
+                        <h4>{{method.name}}</h4>
+                        <p style="padding-left: 20px; padding-right: 20px;">{{method.description}}</p>
+                        <input type="radio" style="width: 20px; height: 20px;" name="payment" ng-checked="method.handle === 'netaxept'" ng-value="{{method.handle}}"
+                            ng-click="selectPayment(method)">
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="confirmation" ng-if="isStep(4)" class="desktop" ng-class="{'order-placed': hasPlacedOrder}">
+            <h2>5/5. Bekreft og betal</h2>
+            <div class="checkout-section-content">
+                <label>
+                    <input type="checkbox" style="width: 20px; height: 20px;" ng-model="acceptTos"> Jeg aksepterer Barefilter.no's
+                    <a href='/salgs-og-leveringsbetingelser' target="_blank">Salgs- og leveringsbetingelser</a>
+                </label>
+                <button ng-if="acceptTos" type="submit" class="barefilter-btn dark-blue-inverted" ng-click="placeOrder()">Fortsett til betaling&nbsp;&nbsp;&nbsp;
+                    <i class="fa fa-arrow-right"></i>
+                </button>
+                <button type="submit" class="barefilter-btn dark-blue-inverted" style="margin-right: 10px; border-color: #ffffff; background: #ffffff; color: #16417E;"
+                    ng-click="back()">Tilbake&nbsp;&nbsp;&nbsp;
+                    <i class="fa fa-arrow-left"></i>
+                </button>
+            </div>
+            <div class="checkout-feedback-section-content" ng-class="{'order-succeeded': hasSuccededPlacingOrder(), 'order-failed': hasFailedPlacingOrder(), 'placing-order': placingOrder}">
+                <div class="col-lg-12 loader-container">
+                    <div class="barefilter-loader xs"></div>
+                </div>
+
+                <div class="col-lg-12 success-container">
+                    <p ng-if="isUsingNetaxept()">Din ordre er fullført! Vi redirekterer deg videre til din portal (Netaxept).</p>
+                    <p ng-if="!isUsingNetaxept() && !extras.guest">Din ordre er fullført! Vi redirekterer deg videre til din portal.</p>
+                    <p ng-if="!isUsingNetaxept() && extras.guest">Din ordre er fullført!
+                        <br>Ordrenummer: {{order.identifier}}</p>
+                </div>
+                <div class="col-lg-12 error-container">
+                    <p>Beklager, en feil oppstod. Vennligst kontakt oss eller prøv igjen.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+    <div class="col-lg-3">
+        <div class="order-summary">
+            <h2>Din handlekurv ({{cart.length}})</h2>
+            <p>Varer, inkl. mva:
+                <span class='pull-right'>kr {{totals.goods | number}} ,-</span>
+            </p>
+            <p ng-if="!hasFreeShipping()">Frakt, inkl. mva:
+                <span class='pull-right'>kr {{totals.shipping | number}} ,-</span>
+            </p>
+            <p ng-if="hasFreeShipping()">Frakt, inkl. mva:
+                <span class='pull-right'>Gratis frakt</span>
+            </p>
+            <p ng-if="totals.discount > 0">Rabatt, inkl. mva:
+                <span class='pull-right'>kr {{totals.discount | number}} ,- </span>
+            </p>
+            <p ng-if="!isUsingNetaxept()">Fakturagebyr, inkl. mva:
+                <span class='pull-right'>kr 35,-</span>
+            </p>
+
+            <p>Dette inkluderer 25% mva:
+                <span class='pull-right'>kr {{totals.tax | number}} ,-</span>
+            </p>
+            <p>
+                <b>Total, inkl. mva:
+                    <span class='pull-right'>kr {{totals.total | number}} ,-</span>
+                </b>
+            </p>
+        </div>
+
+    </div>
+</div>
+
+<section id="confirmation" ng-if="isStep(1) && hasProducts()" class="mobile">
+    <div class="checkout-section-content">
+        <button type="submit" class="barefilter-btn dark-blue-inverted" ng-click="next()">2/5 Leveringsadresse&nbsp;&nbsp;&nbsp;
+            <i class="fa fa-arrow-right"></i>
+        </button>
+        <p>
+            <b>Total, inkl. mva:
+                <span class='pull-right'>kr {{totals.total | number}} ,-</span>
+            </b>
+        </p>
+    </div>
+    <!-- <div style="height: 30px; margin-left: 10px; margin-right: 10px"></div> -->
+</section>
+<section id="confirmation" ng-if="isStep(2)" class="mobile">
+    <div class="checkout-section-content" ng-if="accountAvailable && isValidEmail(shippingAddress.email) && !isLoggedIn() && !extras.guest">
+        <div class="col-lg-12 text-center">
+            <p style="margin-left: 0px; margin-right: 0px">
+                <strong>Notat:</strong> Vi vil opprette en konto til deg med
+                <strong>{{shippingAddress.email}}</strong> hvor passordet blir tilsendt på e-post.</p>
+        </div>
+    </div>
+    <div class="checkout-section-content" ng-if="!accountAvailable && !extras.guest">
+        <div class="col-lg-12 text-center">
+            <p style="font-size: 14px;">
+                <strong>Notat:</strong> Det er allerede en bruker registrert med e-posten
+                <strong>{{shippingAddress.email}}</strong>.
+                <a href="logg-inn">Logg inn for å fortsette</a>. Har du glemt passordet?
+                <a href="passord">Tilbakestill passordet her</a>.
+            </p>
+        </div>
+    </div>
+
+    <div class="checkout-section-content">
+        <button type="submit" class="barefilter-btn dark-blue-inverted" ng-if="canMoveToShippingDetails()" ng-click="next()">3/5 Fraktmetode&nbsp;&nbsp;&nbsp;
+            <i class="fa fa-arrow-right"></i>
+        </button>
+        <button type="submit" class="barefilter-btn dark-blue-inverted" style="margin-right: 10px; border-color: #ffffff; background: #ffffff; color: #16417E;"
+            ng-click="back()">Tilbake&nbsp;&nbsp;&nbsp;
+            <i class="fa fa-arrow-left"></i>
+        </button>
+    </div>
+</section>
+<section id="confirmation" ng-if="isStep(3)" class="mobile">
+    <div class="checkout-section-content">
+        <button type="submit" class="barefilter-btn dark-blue-inverted" ng-if="hasValidShippingMethod()" ng-click="next()">4/5 Betalingsmåte&nbsp;&nbsp;&nbsp;
+            <i class="fa fa-arrow-right"></i>
+        </button>
+        <button type="submit" class="barefilter-btn dark-blue-inverted" style="margin-right: 10px; border-color: #ffffff; background: #ffffff; color: #16417E;"
+            ng-click="back()">Tilbake&nbsp;&nbsp;&nbsp;
+            <i class="fa fa-arrow-left"></i>
+        </button>
+    </div>
+</section>
+<section id="confirmation" ng-if="isStep(4)" class="mobile" ng-class="{'order-placed': hasPlacedOrder}">
+    <div class="checkout-section-content">
+        <label style="width: 100%; margin-bottom: 30px; background-color: white;padding: 20px 10px;">
+            <input type="checkbox" style="width: 20px; height: 20px;margin-right: 10px;" ng-model="acceptTos" ng-change="changeAccept()"> Jeg aksepterer Barefilter.no's
+            <a href='/salgs-og-leveringsbetingelser' target="_blank" style="display: block; margin-left: 33px;">Salgs- og leveringsbetingelser</a>
+        </label>
+        <button ng-if="acceptTos" type="submit" class="barefilter-btn dark-blue-inverted" ng-click="placeOrder()">Fortsett til betaling&nbsp;&nbsp;&nbsp;
+            <i class="fa fa-arrow-right"></i>
+        </button>
+        <button type="submit" class="barefilter-btn dark-blue-inverted" style="margin-right: 10px; border-color: #ffffff; background: #ffffff; color: #16417E;"
+            ng-click="back()">Tilbake&nbsp;&nbsp;&nbsp;
+            <i class="fa fa-arrow-left"></i>
+        </button>
+    </div>
+</section>
+<div id="confirmation_footer_anchor"></div>
+<section id="confirmation_footer" ng-if="isStep(1)" class="mobile">
+    <div class="checkout-section-content">
+        <button type="submit" class="barefilter-btn dark-blue-inverted" ng-click="next()">2/5 Leveringsadresse&nbsp;&nbsp;&nbsp;
+            <i class="fa fa-arrow-right"></i>
+        </button>
+    </div>
+    <p>
+        <b>Total, inkl. mva:
+            <span class='pull-right'>kr {{totals.total | number}} ,-</span>
+        </b>
+    </p>
+</section>
+<section id="confirmation_footer" ng-if="isStep(2)" class="mobile">
+    <div class="checkout-section-content" ng-if="accountAvailable && isValidEmail(shippingAddress.email) && !isLoggedIn() && !extras.guest">
+        <div class="col-lg-12 text-center">
+            <p style="    margin-left: 0px; margin-right: 0px; font-size: 11px;color: red;">
+                <strong>Notat:</strong> Vi vil opprette en konto til deg med
+                <strong>{{shippingAddress.email}}</strong> hvor passordet blir tilsendt på e-post.</p>
+        </div>
+    </div>
+    <div class="checkout-section-content" ng-if="!accountAvailable && !extras.guest">
+        <div class="col-lg-12 text-center">
+            <p style="font-size: 14px;">
+                <strong>Notat:</strong> Det er allerede en bruker registrert med e-posten
+                <strong>{{shippingAddress.email}}</strong>.
+                <a href="logg-inn">Logg inn for å fortsette</a>. Har du glemt passordet?
+                <a href="passord">Tilbakestill passordet her</a>.
+            </p>
+        </div>
+    </div>
+
+    <div class="checkout-section-content">
+        <button type="submit" class="barefilter-btn dark-blue-inverted" ng-if="canMoveToShippingDetails()" ng-click="next()">3/5 fraktmetode&nbsp;&nbsp;&nbsp;
+            <i class="fa fa-arrow-right"></i>
+        </button>
+        <!-- <button type="submit" class="barefilter-btn dark-blue-inverted" style="margin-right: 10px; border-color: #e4e4e4; background: #e4e4e4; color: #16417E;" ng-click="back()">Tilbake&nbsp;&nbsp;&nbsp;
+            <i class="fa fa-arrow-left"></i>
+        </button> -->
+    </div>
+    <p>
+        <b>Total, inkl. mva:
+            <span class='pull-right'>kr {{totals.total | number}} ,-</span>
+        </b>
+    </p>
+</section>
+<section id="confirmation_footer" ng-if="isStep(3)" class="mobile">
+    <div class="checkout-section-content">
+        <button type="submit" class="barefilter-btn dark-blue-inverted" ng-if="hasValidShippingMethod()" ng-click="next()">4/5 betalingsmåte&nbsp;&nbsp;&nbsp;
+            <i class="fa fa-arrow-right"></i>
+        </button>
+        <!-- <button type="submit" class="barefilter-btn dark-blue-inverted" style="margin-right: 10px; border-color: #e4e4e4; background: #e4e4e4; color: #16417E;" ng-click="back()">Tilbake&nbsp;&nbsp;&nbsp;
+            <i class="fa fa-arrow-left"></i>
+        </button> -->
+    </div>
+    <p>
+        <b>Total, inkl. mva:
+            <span class='pull-right'>kr {{totals.total | number}} ,-</span>
+        </b>
+    </p>
+</section>
+<section id="confirmation_footer" ng-if="isStep(4)" class="mobile">
+    <div class="checkout-section-content">
+        <button type="submit" class="barefilter-btn dark-blue-inverted" ng-if="acceptToss" ng-click="placeOrder()">Fortsett til betaling&nbsp;&nbsp;&nbsp;
+            <i class="fa fa-arrow-right"></i>
+        </button>
+        <!-- <button type="submit" class="barefilter-btn dark-blue-inverted" style="margin-right: 10px; border-color: #e4e4e4; background: #e4e4e4; color: #16417E;" ng-click="back()">Tilbake&nbsp;&nbsp;&nbsp;
+                <i class="fa fa-arrow-left"></i>
+            </button> -->
+    </div>
+    <p>
+        <b>Total, inkl. mva:
+            <span class='pull-right'>kr {{totals.total | number}} ,-</span>
+        </b>
+    </p>
+</section>
+<div ng-if="!hasProducts() && !loading" class="row empty-cart">
+    <div class="col-lg-12">
+        <div class="description">
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3 col-sm-12 text-center">
+                    <img width="90" src="img/empty-cart.svg" alt="#">
+                    <h2>Din handlekurv er tom</h2>
+                    <h4>Vi har et bredt sortiment av filter til enebolig og industribygg.</h4>
+                    <h4>Utforsk nettbutikken eller kontakt oss om du har spørsmål.</h4>
+                    <a href="/nettbutikk/enebolig/bovent-covent">
+                        <button type="button" class="barefilter-btn dark-blue-full">Filter til enebolig</button>
+                    </a>
+                    <a href="/nettbutikk/industribygg/f7-industrifilter">
+                        <button type="button" class="barefilter-btn dark-blue-full">Filter til industribygg</button>
+                    </a>
+                    <p></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div ng-if="loading" class="loader-container">
+    <div class="barefilter-loader md centered"></div>
+</div>

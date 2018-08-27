@@ -1,0 +1,72 @@
+<div class="barefilter-store">
+    <h2>2/2. Finn og kjøp produkter fra nettbutikken</h2>
+    <div class="barefilter-product-search ">
+        <div class="search-box-container">
+            <div class="search-box">
+                <h1>Velger filtertype</h1>
+                <p>Kjøp og søk etter ventilasjonsfilter. Ganske enkelt!</p>
+                <input class="form-control" type="text" placeholder="Search by name" ng-model="searchQuery" ng-change="search()" />
+            </div>
+        </div>
+
+        <div class="products" ng-class="{'empty' : !hasResults()}">
+            <div class="product-teaser" ng-repeat="p in results">
+                <div class="product-image">
+                    <img ng-src="{{p.images[0].url}}" alt="placeholder" />
+                </div>
+                <div class="product-description">
+                    <h5>{{p.name}}</h5>
+                    <h6>{{p.category.name}}</h6>
+                    <h6>SKU: {{p.sku}}</h6>
+                    <p>kr {{p.price | number}},- (inkl. mva.)</p>
+
+                    <div class="shopping-cart-bag" ng-click="addToCart(p)"></div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+    <div class="barefilter-cart" ng-if="hasProductsInCart()">
+        <section id="barefilter-cart-products">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <td style='width: 40%;'>Produkt(er)</td>
+                        <td style='width: 10%;'>Pris</td>
+                        <td style='width: 35%;'>Type abonnement</td>
+                        <td style='width: 10%;'>Antall</td>
+                        <td style='width: 5%;'>Slett</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="p in cart">
+                        <td class='product'>
+                            <img ng-src="{{p.images[0].url}}" alt='product preview image' />
+                            <div>
+                                <p>{{p.name}}</p>
+                                <span>{{p.category.name}}</span>
+                            </div>
+                        </td>
+                        <td class="product-price discount">
+                            <span>kr {{p.price * p.total | number}},-</span>
+                            <span>kr {{p.cost | number}},-</span>
+                        </td>
+                        <td>
+                            <select class="form-control">
+                                <option>Engangskjøp</option>
+                                <option>Levering 1 gang i året 5% rabatt</option>
+                                <option>Levering 2 ganger i året 10% rabatt</option>
+                            </select>
+                        </td>
+                        <td>
+                            <input type="number" class="form-control" value='1' ng-model="p.total" ng-change="updateCart()">
+                        </td>
+                        <td>
+                            <i class="fa fa-times delete" aria-hidden="true" ng-click="removeFromCart(p)"></i>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
+</div>

@@ -1,0 +1,267 @@
+<div class="transactions-history" ng-class="{'loading': loading}">
+    <div class="transactions-title">
+        <h1>Kategorier</h1>
+        <input class="form-control ng-pristine ng-valid ng-empty ng-touched" type="text" placeholder="Søk etter kategorinavn" ng-model="searchQuery"
+            ng-submit="triggerSearch()" ng-keyup="$event.keyCode == 13 && triggerSearch()">
+    </div>
+
+    <div class="transactions-body">
+        <section id="no-transactions" ng-if="!hasCategories()">
+            <h2>Kategorioversikt</h2>
+            <div>
+                <img src="" alt="" />
+                <h3>Du har ingen kategorier i nettbutikken</h3>
+                <p>Du kan opprette en kategori ved å trykke på knappen nedenfor</p>
+                <button type="button" class="barefilter-btn light-green" ng-click="addNew()">Opprett kategori</button>
+
+            </div>
+        </section>
+        <section id="transactions-table" ng-if="hasCategories()">
+            <h2>Kategorioversikt
+                <div class="pull-right">
+                    <a class="barefilter-btn light-green" ng-click="addNew()">Opprett kategori</a>
+                </div>
+            </h2>
+            <table>
+                <thead>
+                    <tr>
+                        <td style="width: 5%;">Nr.</td>
+                        <td style="width: 50%;">Kategorinavn</td>
+                        <td style="width: 5%;">Innstillinger</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="category in categories">
+                        <td>{{category.id}}</td>
+
+                        <td>{{category.name}}
+                            <br>
+                            <b>{{category.type.name}}</b>
+                        </td>
+                        <td class="controls">
+                            <button type="button" class="edit" ng-click="edit(category)">
+                                <i class="fa fa-pencil" aria-hidden="true"></i>
+                            </button>
+                            <button type="button" class="delete" ng-click="delete(category)">
+                                <i class="fa fa-times" aria-hidden="true"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+    <div class="loader-container">
+        <div class="barefilter-loader md centered"></div>
+    </div>
+</div>
+<div class="modal fade" id="create-category-modal" tabindex="-1" role="dialog">
+    <div class="vertical-alignment-helper">
+        <div class="modal-dialog vertical-align-center" role="document">
+            <div class="modal-content">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 transfer-description" ng-if="isViewing('fields')">
+                            <div class='transfer-title'>
+                                <h1 ng-if="isAddingNew">Opprett kategori</h1>
+                                <h1 ng-if="!isAddingNew">Edit kategori</h1>
+                            </div>
+                            <hr />
+                            <section id='contact-information' ng-if="sectionType">
+                                <h2>Velg type</h2>
+                                <p>Velg kategorien du ønsker å opprette undekategori for</p>
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <select class="form-control" ng-model="selectedType" ng-change="onTypeChange()">
+                                            <option value="1">Enebolig</option>
+                                            <option value="2">Industribygg</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <hr />
+                            </section>
+                            <section id='contact-information' ng-if="sectionMainInput && !isAddingNew">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="subCategory" style="display: flex;">
+                                            <input type="text" id="main-category-name" placeholder="F.eks: Flexit" ng-model="mainCategory.name" ng-change="subCategoryCheck()">
+                                        </div>
+                                        <p ng-if="!canAddCategory">
+                                            There is an existing category with that handle, try another one please.
+                                        </p>
+                                    </div>
+                                </div>
+                                <hr />
+                            </section>
+                            <section id='contact-information' ng-if="sectionMainDes && !isAddingNew">
+                                <h2>Kategoribeskrivelse</h2>
+                                <p>Beskriv kategorien så godt som mulig</p>
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <textarea class="category-textarea" id="mainCategoryDescription" ng-model="mainCategory.description"></textarea>
+                                    </div>
+                                </div>
+                                <hr />
+                            </section>
+                            <section id="contact-information" ng-if="sectionMainImg && !isAddingNew">
+                                <button type="submit" class="barefilter-btn light-green img-upload-button" ng-click="saveMainCategory()">Update kategori</button>
+                                <button ng-if="is_main_banner_able" class="barefilter-btn dark-blue img-upload-button" ng-click="view('images', 'main_banner_images')">
+                                    BANNERBILDE
+                                </button>
+                                <button ng-if="is_main_cat_able" class="barefilter-btn dark-blue img-upload-button" ng-click="view('images', 'main_cat_images')">
+                                    KATEGORBILDE
+                                </button>
+                            </section>
+                            <section id='contact-information' ng-if="sectionMain">
+                                <h2>Velg hovedkateogri</h2>
+                                <p>Velg kategorien du ønsker å opprette undekategori for</p>
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <select class="form-control" ng-model="subCategory.parent_id">
+                                            <option ng-repeat="cat in allMainCategories | filter : {type_id: selectedType}" value="{{cat.id}}" ng-selected="subCategory.parent_id  == cat.id">{{cat.name}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <hr />
+                            </section>
+                            <section id='contact-information' ng-if="sectionSub">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <h2>Under kategori</h2>
+                                        <p>Skriv inn underkategorinavnet her</p>
+                                        <div class="subCategory" style="display: flex;">
+                                            <input type="text" id="sub-category-name" placeholder="F.eks: Flexit" ng-model="subCategory.name" ng-change="subCategoryCheck()">
+                                        </div>
+                                        <p ng-if="!canAddCategory">
+                                            There is an existing category with that handle, try another one please.
+                                        </p>
+                                    </div>
+                                </div>
+                                <hr />
+                            </section>
+                            <section id='contact-information' ng-if="sectionSubDes">
+                                <h2>Kategoribeskrivelse</h2>
+                                <p>Beskriv kategorien så godt som mulig</p>
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <textarea class="category-textarea" id="subCategoryDescription" ng-model="subCategory.description" style="background-color: white!important;"></textarea>
+                                    </div>
+                                </div>
+                                <hr />
+                            </section>
+                            <section id="contact-information" ng-if="sectionSubImg">
+                                <div ng-if="isAddingNew">
+                                    <button ng-if="isAddingNew" type="submit" class="barefilter-btn light-green img-upload-button" ng-click="saveSubCategory()">Opprett kategori</button>
+                                    <button class="barefilter-btn dark-blue img-upload-button" ng-click="view('images', 'sub_banner_images')" ng-if="is_sub_banner_button">
+                                        BANNERBILDE
+                                    </button>
+                                    <button class="barefilter-btn dark-blue img-upload-button" ng-click="view('images', 'sub_cat_images')" ng-if="is_sub_cat_button">
+                                        KATEGORBILDE
+                                    </button>
+                                    <button class="barefilter-btn light-blue add-category-button" ng-click="addNewSubCategory()" style="float:right;">
+                                        <i class="fa fa-plus-circle fa-icon-setting" style="font-size: 34px!important;"></i>
+                                    </button>
+                                </div>
+                            </section>
+                            <section id="contact-information" ng-if="sectionSubImg">
+                                <div ng-if="isSubCategory && !isAddingNew">
+                                    <button type="submit" class="barefilter-btn light-green img-upload-button" ng-click="saveSubCategory()">Opprett kategori</button>
+                                    <button class="barefilter-btn dark-blue img-upload-button" ng-click="view('images', 'sub_banner_images')">
+                                        BANNERBILDE
+                                    </button>
+                                    <button class="barefilter-btn dark-blue img-upload-button" ng-click="view('images', 'sub_cat_images')">
+                                        KATEGORBILDE
+                                    </button>
+                                </div>
+                                <!-- <button class="barefilter-btn light-blue add-category-button" ng-click="addNewSubCategory()" style="float:right;">
+                                    <i class="fa fa-plus-circle fa-icon-setting" style="font-size: 34px!important;"></i>
+                                </button> -->
+                            </section>
+                            <section id='contact-information' ng-if="sectionSubType">
+                                <h2>Velg underkateogri</h2>
+                                <p>Velg underkategorien du ønsker å opprette undekategori for</p>
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <select class="form-control" ng-model="subsubCategory.parent_id">
+                                            <option ng-repeat="cat in allSubCategories" value="{{cat.id}}" ng-selected="subsubCategory.parent_id  == cat.id">{{cat.name}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <hr />
+                            </section>
+
+                            <section id='contact-information' ng-if="sectionSubSub">
+                                <div class="row" ng-if="is_subsubable">
+                                    <div class="col-lg-12">
+                                        <h2>Under Under kategori</h2>
+                                        <p>Skriv inn under underkategorinavnet her</p>
+                                        <input type="text" id="subsub-category-name" placeholder="F.eks: Flexit" ng-model="subsubCategory.name">
+                                        <div class="alert" ng-if="!canAddCategory">
+                                            <p>There is an existing category with that handle, try another one please.</p>
+                                        </div>
+                                    </div>
+                                    <hr />
+                                </div>
+                            </section>
+                            <section id='contact-information' ng-if="sectionSubSubDes">
+                                <div ng-if="is_subsubable">
+                                    <h2>Kategoribeskrivelse</h2>
+                                    <p>Beskriv kategorien så godt som mulig</p>
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <textarea class="category-textarea" id="subsubCategoryDescription" ng-model="subsubCategory.description" style="background-color: white!important;"></textarea>
+                                        </div>
+                                    </div>
+                                    <hr />
+                                </div>
+
+                            </section>
+                            <section id="contact-information" ng-if="sectionSubSubImg">
+                                <div ng-if="is_subsubable">
+                                    <button class="barefilter-btn light-green img-upload-button" ng-click="save()">Opprett kategori</button>
+                                    <button class="barefilter-btn dark-blue img-upload-button" ng-click="view('images', 'sub_sub_banner_images')" ng-if="is_sub_sub_cat_able">
+                                        BANNERBILDE
+                                    </button>
+                                    <button class="barefilter-btn dark-blue img-upload-button" ng-click="view('images', 'sub_sub_cat_images')" ng-if="is_sub_sub_cat_able">
+                                        KATEGORBILDE
+                                    </button>
+                                </div>
+                            </section>
+                            <!-- <button ng-if="!isAddingNew" type="submit" class="barefilter-btn light-green" ng-click="update()" style="float: right;">Update kategori</button> -->
+                        </div>
+
+                        <div class="col-lg-12 col-md-12 transfer-description" ng-if="isViewing('images')">
+                            <div class='transfer-title'>
+                                <h1 ng-if="is_main_banner_image">Upload MainCategory BannerImage</h1>
+                                <h1 ng-if="is_main_cat_image">Upload MainCategory CategoryImage</h1>
+                                <h1 ng-if="is_sub_banner_image">Upload SubCategory BannerImage</h1>
+                                <h1 ng-if="is_sub_cat_image">Upload SubCategory CategoryImage</h1>
+                                <h1 ng-if="is_sub_sub_banner_image">Upload Sub SubCategory BannerImage</h1>
+                                <h1 ng-if="is_sub_sub_cat_image">Upload Sub SubCategory CategoryImage</h1>
+                            </div>
+                            <hr />
+                            <section id="contact-information">
+                                <form action="/file-upload" class="dropzone no-margin" id="image-uploader">
+                                    <div class="fallback">
+                                        <input name="photo" type="file" multiple/>
+                                    </div>
+                                </form>
+                            </section>
+                            <hr />
+                            <button class="barefilter-btn light-green" ng-click="view('fields')">
+                                <i class="fa fa-arrow-left" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+</div>

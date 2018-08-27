@@ -1,0 +1,129 @@
+<ul class="my-account-menu">
+    <div ng-if="!$root.isAdmin()">
+        <li ui-sref="dashboard" ng-class="{'active': $root.isBrowsing('dashboard')}">
+            <a href="javascript:;">
+                <i class="fa fa-dashboard"></i>
+                <span>Oversikt</span>
+            </a>
+        </li>
+        <li ui-sref="orders" ng-if="$root.isMember()" ng-class="{'active': $root.isBrowsing('orders')}">
+            <a href="javascript:;">
+                <i class="one-time-transactions"></i>
+                <span>Mine ordre</span>
+            </a>
+        </li>
+        <li ui-sref="partner" ng-if="$root.isPartner()" ng-class="{'active': $root.isBrowsing('partner')}">
+            <a href="javascript:;">
+                <i class="partner"></i>
+                <span>Opprett kunde/bygg</span>
+            </a>
+        </li>
+        <li ui-sref="buildings" ng-if="$root.isPartner()" ng-class="{'active': $root.isBrowsing('buildings')}">
+            <a href="javascript:;">
+                <i class="partner"></i>
+                <span>Mine kunder/bygg</span>
+            </a>
+        </li>
+        <li ui-sref="one-time-transactions" ng-if="$root.isMember()" ng-class="{'active': $root.isBrowsing('one-time-transactions')}">
+            <a href="javascript:;">
+                <i class="one-time-transactions"></i>
+                <span>Mine engangskjøp</span>
+            </a>
+        </li>
+
+        <li ui-sref="subscriptions" ng-if="$root.isMember()" ng-class="{'active': $root.isBrowsing('subscriptions')}">
+            <a href="javascript:;">
+                <i></i>
+                <span>Mine filterabonnement</span>
+            </a>
+        </li>
+        <li ui-sref="package-tracking" ng-class="{'active': $root.isBrowsing('package-tracking')}">
+            <a href="javascript:;">
+                <i class="package-tracking"></i>
+                <span>Pakkesporing</span>
+            </a>
+        </li>
+        <li ui-sref="member-settings" ng-class="{'active': $root.isBrowsing('member-settings')}">
+            <a href="javascript:;">
+                <i class="user-settings"></i>
+                <span>Brukerinnstillinger</span>
+            </a>
+        </li>
+    </div>
+    <!-- admin only -->
+    <div ng-if="$root.isAdmin()">
+        <li ui-sref="dashboard" ng-class="{'active': $root.isBrowsing('dashboard')}">
+            <a href="javascript:;">
+                <i class="fa fa-dashboard"></i>
+                <span>Oversikt</span>
+            </a>
+        </li>
+        <li ui-sref="sales" ng-class="{'active': $root.isBrowsing('sales')}">
+            <a href="javascript:;">
+                <i class="one-time-transactions"></i>
+                <span>Ordrer</span>
+            </a>
+        </li>
+        <li ui-sref="browse-subscriptions" ng-class="{'active': $root.isBrowsing('browse-subscriptions')}">
+            <a href="javascript:;">
+                <i class="one-time-transactions"></i>
+                <span>Abonnementer</span>
+            </a>
+        </li>
+        <li ui-sref="members" ng-class="{'active': $root.isBrowsing('members')}">
+            <a href="javascript:;">
+                <i class="one-time-transactions"></i>
+                <span>Kunder</span>
+            </a>
+        </li>
+        <li ui-sref="partners" ng-class="{'active': $root.isBrowsing('partners')}">
+            <a href="javascript:;">
+                <i class="one-time-transactions"></i>
+                <span>Partnere</span>
+            </a>
+        </li>
+
+        <li ui-sref="discounts" ng-class="{'active': $root.isBrowsing('discounts')}">
+            <a href="javascript:;">
+                <i class="one-time-transactions"></i>
+                <span>Rabattkoder</span>
+            </a>
+        </li>
+
+        <li ui-sref="products" ng-class="{'active': $root.isBrowsing('products')}">
+            <a href="javascript:;">
+                <i class="one-time-transactions"></i>
+                <span>Produkter</span>
+            </a>
+        </li>
+
+        <li ui-sref="categories" ng-class="{'active': $root.isBrowsing('categories')}">
+            <a href="javascript:;">
+                <i class="one-time-transactions"></i>
+                <span>Kategorier</span>
+            </a>
+        </li>
+
+
+
+        <li ui-sref="pages" ng-class="{'active': $root.isBrowsing('pages')}">
+            <a href="javascript:;">
+                <i class="one-time-transactions"></i>
+                <span>Sider</span>
+            </a>
+        </li>
+
+        <li ui-sref="settings" ng-class="{'active': $root.isBrowsing('settings')}">
+            <a href="javascript:;">
+                <i class="one-time-transactions"></i>
+                <span>Innstillinger</span>
+            </a>
+        </li>
+    </div>
+    <li>
+        <a href="/logout">
+            <i class="logout"></i>
+            <span>Logg ut</span>
+        </a>
+    </li>
+</ul>

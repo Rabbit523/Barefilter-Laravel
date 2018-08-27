@@ -1,0 +1,90 @@
+<div class="transactions-history">
+    <div class="transactions-title">
+        <h1>{{building.name}}</h1>
+    </div>
+
+    <div class="transactions-body">
+
+        <section id="transactions-table">
+          <h2>Oversikt over kunde/bygg
+                <div class="pull-right">
+                    <a class="barefilter-btn light-green" ui-sref="partner">Legg inn bestilling</a>
+                </div>
+            </h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <td style="width: 2%;">BYGGNAVN</td>
+                        <td style="width: 90%;">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <td style="width: 15.5%;">Anleggsnummer</td>
+                                        <td style="width: 9%;">​Avdeling </td>
+                                        <td style="width: 49%;">Produktnavn</td>
+                                        <td style="width: 21.5%;">Antall leveringer</td>
+                                        <td style="width: 21.5%;">Pris</td>
+                                        <td style="width: 3%;">Bestill</td>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </td>
+
+                    </tr>
+                </thead>
+                <tbody class="filteredData">
+                    <tr ng-repeat="facility in building.facilities">
+                        <td style="width: 2%;">{{facility.name}}</td>
+                        <td style="width: 90%;">
+                            <table>
+                                <tbody>
+                                    <tr ng-repeat="order in facility.orders">
+                                        <td style="width: 10%;">
+                                            <strong>{{order.identifier}}</strong>
+                                        </td>
+                                        <td style="width: 10%;">
+                                            <strong></strong>
+                                        </td>
+                                        <td style="width: 45%;" >
+                                            <div class="product" ng-repeat="p in order.products">
+                                                <img ng-src="{{p.product.images[0].url}}" alt="placeholder">
+                                                <div>
+                                                    <p>{{p.product.name}}</p>
+                                                    <span>{{p.product.short_description}}</span>
+                                                </div>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        </td>
+
+
+                                        <td style="width: 20%;">
+                                            <strong>1stk. (Engangskjøp) </strong>
+                                        </td>
+
+                                        <td style="width: 10%;">
+                                            <strong>Kr {{order.total}},-</strong>
+                                        </td>
+                                        <td style="width: 3%;">
+                                            <input type="checkbox" class="
+                                                    addsameorder" data-id="79">
+                                            <strong>
+                                                <a class="btn btn-danger deltepartnerOrder" data-id="79">
+                                                    <i class="fa fa-trash"></i>
+                                                </a>
+                                            </strong>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </section>
+    </div>
+
+
+</div>

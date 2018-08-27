@@ -1,0 +1,120 @@
+<div class="row">
+    <div class="col-lg-6 col-md-6 col-lg-offset-3 col-md-offset-3">
+        <div class="welcome-form" ng-show="isStep(1)">
+            <div class="col-lg-12">
+                <form id="login-form" class="registration-form" ng-class="{'loading': isLoading(), 'error': hasError()}">
+                    <h2>Glemt passord</h2>
+                    <div class="required-fields">
+                        <div class="col-lg-12">
+                            <input id="email" name="email" type="email" class="form-control" ng-model="email" placeholder="Email">
+                        </div>
+                    </div>
+                    <div class="col-lg-12 confirmation">
+                        <button id="login-button" type="submit" class="barefilter-btn dark-blue-full pull-right" ng-click="getCode()">Gjenopprett</button>
+                    </div>
+
+                    <div class="col-lg-12 loader-container">
+                        <div class="barefilter-loader xs"></div>
+                    </div>
+
+                    <div class="col-lg-12 error-container">
+                        <p>Det er ingen konto registrert med denne e-posten.</p>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+
+        <div class="welcome-form" ng-show="isStep(2)">
+            <div class="col-lg-12">
+                <form id="login-form" class="registration-form" ng-class="{'loading': isLoading(), 'error': hasError()}">
+                    <h2>Kode for tilbakestilling</h2>
+                    <div class="required-fields">
+                        <div class="col-lg-12">
+                            <input id="code" name="code" type="text" class="form-control" ng-model="resetCode" placeholder="Gjenopprett kode" ng-class="{'error': hasError(), 'valid': isValidCode()}">
+                        </div>
+                    </div>
+                    <div class="col-lg-12 text-right">
+                        <p>Kode for tilbakestilling ble sendt til din e-postadresse.</p>
+                    </div>
+                    <div class="col-lg-12 confirmation">
+                        <button id="reset-code-button" type="submit" class="barefilter-btn dark-blue-full pull-right" ng-click="testCode()">Neste</button>
+                    </div>
+
+                    <div class="col-lg-12 loader-container">
+                        <div class="barefilter-loader xs"></div>
+                    </div>
+
+                    <div class="col-lg-12 error-container">
+                        <p>Kode for tilbakestilling er ikke riktig.</p>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+
+        <div class="welcome-form" ng-show="isStep(3)">
+            <div class="col-lg-12">
+                <form id="login-form" class="registration-form" ng-class="{'loading': isLoading(), 'error': hasError()}">
+                    <h2>Opprett nytt passord</h2>
+                    <div class="required-fields">
+                        <div class="col-lg-12">
+                            <input id="password" name="password" type="password" class="form-control" placeholder="Nytt passord" ng-model="password" ng-class="{'error': hasError(), 'valid': isValidPassword()}">
+                        </div>
+                        <div class="col-lg-12">
+                            <input id="password" name="password" type="password" class="form-control" placeholder="Gjenta Passord" ng-model="repeatPassword"
+                                ng-class="{'error': hasError(), 'valid': isValidPassword()}">
+                        </div>
+                    </div>
+                    <div class="col-lg-12 confirmation">
+                        <button id="login-button" type="submit" class="barefilter-btn dark-blue-full pull-right" ng-click="updatePassword()">Oppdater passord</button>
+                    </div>
+
+                    <div class="col-lg-12 loader-container">
+                        <div class="barefilter-loader xs"></div>
+                    </div>
+
+                    <div class="col-lg-12 error-container">
+                        <p>Passordene er ikke like. Prøv igjen</p>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+
+        <div class="welcome-form" ng-show="isStep(4)">
+            <div class="col-lg-12">
+                <form id="login-form" class="registration-form" ng-class="{'loading': isLoading(), 'error': hasError()}">
+                    <h2>Logg inn på Bare Filter</h2>
+                    <div class="required-fields">
+                        <div class="col-lg-12">
+                            <input id="email" name="email" type="email" class="form-control" placeholder="Email" ng-model="username">
+                        </div>
+                        <div class="col-lg-12">
+                            <input id="password" name="password" type="password" class="form-control" placeholder="Password" ng-model="userPassword">
+                        </div>
+
+                    </div>
+                    <div class="col-lg-12 confirmation">
+                        <label>
+                            <input id="remember-me" type="checkbox" value=""> Husk meg
+                        </label>
+                        <button id="login-button" type="submit" class="barefilter-btn dark-blue-full pull-right" ng-click="login()">Logg inn</button>
+                    </div>
+
+
+                    <div class="col-lg-12 loader-container">
+                        <div class="barefilter-loader xs"></div>
+                    </div>
+
+                    <div class="col-lg-12 success-container">
+                        <p>Velkommen,<span id="user-fullname">{{user.first_name}} {{user.last_name}}</span>. Vi redirekterer deg videre til din portal.</p>
+                    </div>
+                    <div class="col-lg-12 error-container">
+                        <p>Feil e-post eller passord. Prøv igjen.</p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

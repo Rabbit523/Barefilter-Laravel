@@ -1,0 +1,38 @@
+<div class="transactions-history">
+    <div class="transactions-title">
+        <h1>Instillinger</h1>
+    </div>
+</div>
+
+<div class="application-settings">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" ng-model="settings.configuration.notification_bar.on" style="height: initial;"> Skru notifikasjonsbar på/av
+                    </label>
+                </div>
+                <div class="form-group" ng-if="settings.configuration.notification_bar.on">
+                    <input type="text" class="form-control"  ng-model="settings.configuration.notification_bar.message" placeholder="Message">
+                </div>
+            </div>
+
+            <div class="col-sm-12">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" ng-model="settings.configuration.free_shipping" style="height: initial;"> Skru gratis frakt på/av
+                    </label>
+                    <label>
+                        <input type="text" ng-if="settings.configuration.free_shipping" ng-model="settings.configuration.free_shipping_amount"style="height: initial;" placeholder="gratis fraktbeløp"/>
+                    </label>
+                </div>
+            </div>
+
+            <div class="col-sm-12">
+                <button ng-if="!saving" type="button" class="barefilter-btn dark-blue-full pull-right" ng-click="save()">Lagre</button>
+                <button ng-if="saving" type="button" class="barefilter-btn dark-blue-full pull-right">Lagrer ... </button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,1 @@
+CREATE TABLE `fantasylab_barefilter`.`order_subscriptions` ( `id` INT NOT NULL AUTO_INCREMENT , `order_id` INT NOT NULL , `order_product_id` INT NOT NULL , `processed` BOOLEAN NOT NULL , `to_be_delivered_at` DATETIME NOT NULL , `created_at` DATETIME NOT NULL , `updated_at` DATETIME NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;

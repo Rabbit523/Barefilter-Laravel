@@ -1,0 +1,134 @@
+<div class="transactions-history" ng-class="{'loading': loading}">
+    <div class="transactions-title" ng-if="!creatingOrder">
+        <div class="row">
+            <div class="col-sm-12">
+                <h1>{{user.first_name}} {{user.last_name}}</h1>
+            </div>
+            <div class="col-sm-4">
+                <h4>Kontaktinformasjon</h4>
+                <p><strong>E-postadresse:</strong> {{user.email}}</p>
+                <p><strong>Telefonnummer:</strong> {{getPhone(user)}}</p>
+            </div>
+            <div class="col-sm-4">
+                <h4>Leveringsadresse</h4>
+                <p>{{user.shipping.street_address}}, {{user.shipping.postal_code}} {{user.shipping.city}}</p>
+                <p>{{user.shipping.email}}</p>
+                <p>{{user.shipping.phone}}</p>
+            </div>
+            <div class="col-sm-4">
+                <h4>Fakturaadresse</h4>
+                <p>{{user.billing.street_address}}, {{user.billing.postal_code}} {{user.billing.city}}</p>
+                <p>{{user.billing.email}}</p>
+                <p>{{user.billing.phone}}</p>
+            </div>
+        </div>
+        <div class="row" ng-if="hasOrders() && !creatingOrder">
+            <div class="col-sm-6 col-sm-offset-6 text-right" style="margin-top: 30px;">
+                <button type="button" class="barefilter-btn dark-blue-full" ng-click="createOrder()">Opprett ordre</button>
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="transactions-title" ng-if="creatingOrder">
+        <div class="row">
+            <div class="col-sm-6">
+                <h1>{{user.first_name}} {{user.last_name}}</h1>
+            </div>
+            <div class="col-sm-6 text-right" style="margin-top: 30px;">
+                <button ng-if="creatingOrder" type="button" class="barefilter-btn dark-blue" ng-click="cancelOrderCreation()">Avbryt</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="transactions-body" ng-if="!creatingOrder">
+        <section id="no-transactions" ng-if="!hasOrders()">
+            <h2>ORDREHISTORIKK</h2>
+            <div>
+                <img src="" alt="" />
+                <h3>Ingen ordre er opprettet</h3>
+                  <button type="button" class="barefilter-btn dark-blue" ng-click="createOrder()">Opprett ordre</button>
+            </div>
+        </section>
+        <section id="transactions-table" ng-if="hasOrders()">
+            <h2>ORDREHISTORIKK</h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <td style="width: 10%;">Ordrenr.</td>
+                        <td style="width: 10%;">Betaling</td>
+                        <td style="width: 30%;">Oversikt</td>
+                        <td style="width: 5%;">Totalpris</td>
+                        <td style="width: 5%;">Rabatt</td>
+                        <td style="width: 15%;">Leveringsadresse</td>
+                        <td style="width: 10%;">Ordredato</td>
+                        <td style="width: 10%;">Status</td>
+                        <td style="width: 5%;">Rediger</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="order in user.orders">
+                        <td>
+                            <p><strong>{{order.identifier}}</strong></p>
+                        </td>
+                        <td>
+                            <p><strong>{{(order.payment_method_id === 1) ? "Netaxept" : "Faktura"}}</strong></p>
+                        </td>
+                        <td>
+                            <p>Varer: ({{order.products.length}})</p>
+                            <hr />
+                            <div ng-repeat="orderProduct in order.products">
+                                <p>{{orderProduct.product.name}}
+                                    <strong>({{orderProduct.subscription.name}})</strong>, {{orderProduct.amount}} stk. </p>
+                            </div>
+                        </td>
+
+                        <td>
+                            <strong>kr {{order.total | number }},-</strong>
+                        </td>
+
+                        <td>
+                            <strong>kr {{order.discount | number }},-</strong>
+                        </td>
+
+                        <td>
+                            <p>
+                                <strong>{{order.shipping.first_name}} {{order.shipping.last_name }}</strong>
+                            </p>
+                            <p>{{order.shipping.street_address}}</p>
+                            <p>{{order.shipping.postal_code}} {{order.shipping.city}}</p>
+                        </td>
+
+                        <td>
+                            <strong>{{getPurchaseDate(order.created_at) | date }}</strong>
+                        </td>
+
+                        <td>
+                            <strong ng-if="order.status === -1"> Betaling feilet</strong>
+                            <strong ng-if="order.status === 0"> Ikke prosessert</strong>
+                            <strong ng-if="order.status === 1"> Ikke betalt</strong>
+                            <strong ng-if="order.status === 2"> Betalt</strong>
+                            <strong ng-if="order.status === 3"> Klar for levering</strong>
+                            <strong ng-if="order.status === 4"> Levering feilet</strong>
+                        </td>
+                        <td>
+                            <button type="button" class="barefilter-btn green" ng-click="delete(order)">Slett</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+    <div class="barefilter-partner-store" ng-if="creatingOrder">
+        <member-store subscriptions="subscriptions"></member-store>
+        <member-checkout user="user"></member-checkout>
+    </div>
+
+
+    <div class="loader-container">
+        <div class="barefilter-loader md centered"></div>
+    </div>
+</div>

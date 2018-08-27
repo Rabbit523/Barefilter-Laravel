@@ -1,0 +1,72 @@
+<div class="transactions-history" ng-class="{'loading': loading}">
+    <div class="transactions-title">
+        <h1>Ordre</h1>
+    </div>
+
+    <div class="transactions-body">
+        <section id="no-transactions" ng-if="!hasOrders()">
+            <h2>ORDREHISTORIKK</h2>
+            <div>
+                <img src="" alt="" />
+                <h3>Ingen ordre opprettet enda</h3>
+            </div>
+        </section>
+        <section id="transactions-table" ng-if="hasOrders()">
+            <h2>ORDREHISTORIKK</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <td style="width: 35%;">Oversikt</td>
+                        <td style="width: 10%;">Pris</td>
+                        <td style="width: 20%;">Leveringsadresse</td>
+                        <td style="width: 10%;">Ordredato</td>
+
+                        <td style="width: 10%;">Status</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="order in orders">
+                        <td>
+                            <p>Order ID: ({{order.identifier}})</p>
+                            <p>Paid via <b>{{(order.payment_method_id === 1) ? "Netaxept" : "Faktura"}}</b></p>
+                            <p>Varer: ({{order.products.length}})</p>
+                            <hr />
+                            <div ng-repeat="orderProduct in order.products">
+                                <p>{{orderProduct.product.name}} <strong>({{orderProduct.subscription.name}})</strong>, {{orderProduct.amount}} stk. </p>
+                            </div>
+                        </td>
+                        <td>
+                                <strong>Total: kr {{order.total | number }},-</strong><br>
+                                <strong>Discount: kr {{order.discount | number }},-</strong>
+                            </td>
+                        <td>
+                            <p>
+                                <strong>{{order.shipping.first_name}} {{order.shipping.last_name }}</strong>
+                            </p>
+                            <p>{{order.shipping.street_address}}</p>
+                            <p>{{order.shipping.postal_code}} {{order.shipping.city}}</p>
+                        </td>
+                        <td>
+                            <strong>{{getPurchaseDate(order.created_at) | date }}</strong>
+                        </td>
+
+                        <td>
+                            <strong ng-if="order.status === -1"> Betaling feilet</strong>
+                            <strong ng-if="order.status === 0"> Ikke prosessert</strong>
+                            <strong ng-if="order.status === 1"> Ikke betalt</strong>
+                            <strong ng-if="order.status === 2"> Betalt</strong>
+                            <strong ng-if="order.status === 3"> Klar for levering</strong>
+                            <strong ng-if="order.status === 4"> Levering feilet</strong>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+
+    <div class="loader-container">
+        <div class="barefilter-loader md centered"></div>
+    </div>
+
+</div>

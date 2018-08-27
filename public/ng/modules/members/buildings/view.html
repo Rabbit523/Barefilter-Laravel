@@ -1,0 +1,80 @@
+<div class="barefilter-partner-store">
+    <div class="barefilter-buildings creating-building">
+        <h2>1/1. Opprett Kunde/Bygg</h2>
+        <div class="new-building-section-content">
+                <div class="row">
+                    <div class="col-lg-12">
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h4>1. KONTAKTPERSON</h4>
+                    </div>
+                    <div class="col-sm-6">
+                        <input type="text" id="first-name" placeholder="Fornavn" ng-model="newBuilding.first_name">
+                        <input type="text" id="last-name" placeholder="Etternavn" ng-model="newBuilding.last_name">
+                    </div>
+                    <div class="col-sm-6">
+                        <input type="email" id="email" placeholder="E-postfaktura" ng-model="newBuilding.email">
+                        <input type="text" id="phone" placeholder="Telefonnummer" ng-model="newBuilding.phone">
+                    </div>
+                </div>
+                <hr />
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h4>2. LEVERINGSADRESSE</h4>
+                    </div>
+                    <div class="col-sm-6">
+                        <input type="text" id="building-name" placeholder="Kundens/Byggets navn" ng-model="newBuilding.name">
+                        <input type="text" id="building-street-address" placeholder="Adresse" ng-model="newBuilding.street_address">
+                    </div>
+                    <div class="col-sm-6">
+                        <input type="text" id="building-postal-code" placeholder="Postnummer" ng-model="newBuilding.postal_code">
+                        <input type="text" id="building-city" placeholder="Poststed" ng-model="newBuilding.city">
+                    </div>
+                </div>
+                <hr />
+                <div class="row">
+                    <div class="col-sm-12 text-right feedback-container" ng-class="{'loading' : loading}">
+                        <button type="button" class="barefilter-btn dark-blue" ng-click="saveBuilding()">lagre</button>
+                        <div class="feedback">{{feedback}}</div>
+                        <div class="barefilter-loader xs"></div>
+                    </div>
+                </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="transactions-history">
+    <div class="transactions-body">
+        <section id="addresses">
+            <div ng-if="hasBuildings()">
+              <h2>Mine Kunder/Bygg</h2>
+                <div class="addresses-section-content">
+                    <div class="address building-container" ng-repeat="building in buildings" ui-sref="building({id: building.id})">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <p><strong>{{building.name}}</strong>. {{building.address.street_address}} {{building.address.postal_code}}, {{building.address.city}}</p>
+                                    <p><strong>{{building.address.first_name}} {{building.address.last_name}}</strong> | {{building.address.email}} | {{building.address.phone}}</p>
+                                    <p>{{getNamesOfFacilities(building)}}</p>
+                                    <div class="controls pull-right" ng-if="false">
+                                        <button type="button" class="edit">
+                                            <i class="fa fa-pencil" aria-hidden="true"></i>
+                                        </button>
+                                        <button type="button" class="delete">
+                                            <i class="fa fa-times" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <span class="clearfix"></span>
+        </section>
+    </div>
+</div>

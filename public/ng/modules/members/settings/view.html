@@ -1,0 +1,12 @@
+<div class="transactions-history">
+    <div class="transactions-title">
+        <h1>Brukerinnstillinger</h1>            
+    </div>
+    <div class="transactions-body">
+        <section id="information" partner-information ng-if="$root.isPartner()"></section>
+        <section id="information" member-information ng-if="$root.isMember()"></section>
+        <section id="password-change" change-password></section>
+        <section id="information" partner-logo ng-if="$root.isPartner()"></section>
+        <section id="addresses" member-addresses ng-if="$root.isMember()"></section>
+    </div>
+</div>

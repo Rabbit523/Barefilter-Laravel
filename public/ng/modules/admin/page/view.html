@@ -1,0 +1,210 @@
+<div class="transactions-history" ng-class="{'loading': loading}">
+    <div class="transactions-title">
+        <h1>{{page.name}}</h1>
+    </div>
+
+    <div class="transactions-body">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="content-box">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="module type-title">
+                                    <div class="form-group">
+                                        <input type="text" name="" id="" ng-model="page.name" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="row" ng-if="hasSections() && (page.name!='Kunde')">
+                            <div class="col-xs-12">
+                                <ul class="nav nav-tabs" role="tablist">
+                                    <li role="presentation" ng-class="{'active': isEditingSection(section)}" ng-repeat="section in sections">
+                                        <a ng-click="editSection(section)" role="tab" data-toggle="tab">{{section.title}}</a>
+                                    </li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div role="tabpanel" class="tab-pane active">
+                                        <div class="module type-wysiwyg">
+                                            <div class="summernote-wrapper">
+                                                <div id="page-section"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row" ng-if="page.name=='Kunde'">
+                            <section class="barefilter-faq">
+
+                                <div class="content">
+                                    <!-- Nav tabs -->
+
+                                    <div class="row">
+                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                            <div class="categories">
+                                                <h2>Ofte stilte spørsmål</h2>
+                                                <hr>
+                                                <p>Denne seksjonen tar for seg de fleste spørsmålene ved kjøp og salg av filter</p>
+                                                <hr>
+                                                <ul class="nav nav-pills nav-stacked" role="tablist">
+                                                    <li role="presentation" ng-repeat="(key, value) in customer">
+                                                        <a href="/#cat{{key}}" aria-controls="cat{{key}}" role="tab" ng-click="selectFaqCat(key)" data-toggle="tab">{{value.category}}</a>
+                                                    </li>
+                                                </ul>
+                                                <hr>
+                                                <div class="answers" style="border: none;">
+                                                    <div class="tab-content">
+                                                        <div role="tabpanel" class="tab-pane fade in active" id="general1">
+                                                            <div class="panel-group accordion collapse in" id="accordion0" role="tablist" aria-multiselectable="true" aria-expanded="true"
+                                                                style="">
+                                                                <div class="panel panel-default">
+                                                                    <div class="panel-heading" id="editCategoryFaq" role="tab">
+                                                                        <h4 class="panel-title">
+                                                                            <a aria-controls="collapseEditOne" aria-expanded="true" data-parent="#accordion" data-toggle="collapse" href="/#collapseEditOne"
+                                                                                role="button">Edit FAQ Category</a>
+                                                                        </h4>
+                                                                    </div>
+
+                                                                    <div aria-labelledby="editCategoryFaq" class="panel-collapse collapse" id="collapseEditOne" role="tabpanel">
+                                                                        <div class="panel-body">
+                                                                            <div class="form-group">
+                                                                                <input type="text" style="width: 100%;" ng-model="faq.editCategoryFAQ">
+                                                                            </div>
+                                                                            <div class="text-right">
+                                                                                <a ng-if="!updating" ng-click="editCatFAQ()" class="barefilter-btn dark-blue ng-scope">OPPDATER</a>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="panel panel-default">
+                                                                    <div class="panel-heading" id="addCategoryFaq" role="tab">
+                                                                        <h4 class="panel-title">
+                                                                            <a aria-controls="collapseAddOne" aria-expanded="true" data-parent="#accordion" data-toggle="collapse" href="/#collapseAddOne"
+                                                                                role="button">Add FAQ Category</a>
+                                                                        </h4>
+                                                                    </div>
+
+                                                                    <div aria-labelledby="addCategoryFaq" class="panel-collapse collapse" id="collapseAddOne" role="tabpanel">
+                                                                        <div class="panel-body">
+                                                                            <div class="form-group">
+                                                                                <input type="text" style="width: 100%;" ng-model="faq.addCategoryFAQ">
+                                                                            </div>
+                                                                            <div class="text-right">
+                                                                                <a ng-if="!updating" ng-click="addCatFAQ()" class="barefilter-btn dark-blue ng-scope">SKAPE</a>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="text-right" style="margin-top: 20px;">
+                                                                    <a ng-if="!updating" ng-click="deleteFaqCat()" class="barefilter-btn dark-blue ng-scope" style="background-color: red;border: red;color: white;">SLETTE</a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+                                            <div class="answers">
+                                                <div class="tab-content">
+                                                    <div class="text-right" style="margin-top: 20px;">
+                                                        <a ng-if="!updating" ng-click="deleteQuestion()" class="barefilter-btn dark-blue ng-scope" style="background-color: red;border: red;color: white;">SLETTE</a>
+                                                    </div>
+                                                    <div ng-repeat="(catFaqId, cat) in customer" role="tabpanel" class="tab-pane fade" ng-class="{'in active': catFaqId == 0}"
+                                                        id="cat{{catFaqId}}">
+                                                        <div class="panel-group accordion collapse in" id="accordion{{catFaqId}}" role="tablist" aria-multiselectable="true" aria-expanded="true"
+                                                            style="">
+                                                            <div class="panel panel-default" ng-repeat="(faqId, answer) in cat.answer">
+                                                                <div class="panel-heading" id="heading{{catFaqId + '' + faqId}}" role="tab">
+                                                                    <h4 class="panel-title">
+                                                                        <a aria-controls="collapse{{catFaqId + '' + faqId}}" aria-expanded="false" class="collapsed" data-parent="#accordion{{catFaqId}}"
+                                                                            data-toggle="collapse" href="/#collapse{{catFaqId + '' + faqId}}"
+                                                                            role="button" ng-click="selectQuestion(catFaqId, faqId)">{{answer.question}}? </a>
+                                                                    </h4>
+                                                                </div>
+                                                                <div aria-labelledby="heading{{catFaqId + '' + faqId}}" class="panel-collapse collapse" id="collapse{{catFaqId + '' + faqId}}"
+                                                                    role="tabpanel">
+                                                                    <div class="panel-body" ng-bind-html="getHtml(answer.answer)"></div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-lg-12 col-md-12 col-sm-12">
+                                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                                    <label for="">Redigere Spørsmål</label>
+                                                    <input type="text" class="form-control" name="title" id="title" ng-model="faq.editQuestion">
+                                                    <label for="">Redigere Svar</label>
+                                                    <div id="editFaq"></div>
+                                                    <div class="text-right" style="margin-top: 20px;">
+                                                        <a ng-if="!updating" ng-click="editQuestion()" class="barefilter-btn dark-blue ng-scope">OPPDATER</a>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                                    <label for="">Legg til Spørsmål</label>
+                                                    <input type="text" class="form-control" name="title" id="title" ng-model="faq.addQuestion">
+                                                    <label for="">Legg til Svar</label>
+                                                    <div id="addFaq"></div>
+                                                    <div class="text-right" style="margin-top: 20px;">
+                                                        <a ng-if="!updating" ng-click="addQuestion()" class="barefilter-btn dark-blue ng-scope">SKAPE</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </section>
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="module type-complementary">
+                                    <div class="title">
+                                        <h6>Søkemotoroptimalisering</h6>
+                                    </div>
+                                    <div class="content">
+                                        <div class="form-group">
+                                            <label for="">Meta tittel</label>
+                                            <small>Maximum 60 characters</small>
+                                            <input type="text" class="form-control" name="title" id="title" ng-model="page.title">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="">Metabeskrivelse</label>
+                                            <small>Maximum 300 characters</small>
+                                            <input type="text" class="form-control" name="description" id="description" ng-model="page.description">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row" style="margin-top: 20px;" ng-if="page.content !== '{}'">
+                <div class="col-xs-12 text-right">
+                    <a ng-if="!updating" ng-click="update()" class="barefilter-btn dark-blue">OPPDATER</a>
+                    <a ng-if="updating" class="barefilter-btn dark-blue disabled">OPPDATER</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="loader-container">
+        <div class="barefilter-loader md centered"></div>
+    </div>
+</div>
+
+
+<div class="sider">
+
+</div>
