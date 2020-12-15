@@ -29,7 +29,7 @@ class Stores
 
 
     public static function advancedSearch(Request $request){
-
+        
         //checking size from search field
         $size_array = null;
         if(strpos($request->query('q'), '*') !== false)
@@ -99,10 +99,10 @@ class Stores
     public static function getCartForCheckout($items){
         $products = Product::whereIn('id', explode(",", $items))->with(["images"])->get();
         return ($products) ? [
-            "products" => $products,
+            "products" => $products, 
             "subscriptions" => Subscription::where('id', '>', 0)->get(),
             "payment_methods" => PaymentMethod::all(),
-            "shipping_methods" => ShippingMethod::all()]
+            "shipping_methods" => ShippingMethod::all()] 
         : ["error" => "No product(s) with such ids " . $handle];
     }
 

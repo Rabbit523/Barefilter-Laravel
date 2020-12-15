@@ -115,7 +115,11 @@
     </div>
     <div class="bottom-footer">
         <div class="col-xs-12 copyright">
+        <script src="//www.tryggehandel.no/?cid=1706&logo=1"></script>
             <ul class="list-inline text-center">
+                <li>
+                    <img alt="Factoring" width="160" src="/img/Factoring-Finans-logo-1.png">
+                </li>
                 <li>
                     <img alt="Netaxept" width="80" src="/img/nets-logo.png">
                 </li>
@@ -126,11 +130,11 @@
                     <img alt="MasterCard" width="45" src="/img/mastercard-logo.png">
                 </li>
                 <li>
-                    <img alt="HeltHjem" width="80" src="/img/helthjem-logo.png">
+                    <img alt="Bring" width="60" src="/img/helthjem-logo.png">
                 </li>
             </ul>
-            <p class="text-center">Opphavsrett © {{date("Y")}} Bare Filter AS. NO 918 034 145 MVA. Webdesign &amp; Systemutvikling:
-                <a href="https://fantasylab.no/"
+            <p class="text-center">Opphavsrett © {{date("Y")}} Bare Filter AS. NO 918 034 145 MVA. UI/UX Design &amp; Full Stack Utvikling:
+                <a href="https://fantasylab.io/"
                     target="_blank">FantasyLab</a>.</p>
             <p class="text-mobile">
                 Opphavsrett @ {{date("Y")}} Bare Filter AS.
@@ -138,3 +142,9 @@
         </div>
     </div>
 </footer>
+        <!-- TrustBox widget - Horizontal -->
+        <div class="trustpilot-widget" data-locale="nb-NO" data-template-id="5406e65db0d04a09e042d5fc" data-businessunit-id="5addc3555573e100014f796a"
+        data-style-height="28px" data-style-width="100%" data-theme="light" style="background: white; padding: 20px 0px 20px 0px;">
+            <a href="https://www.trustpilot.com/review/barefilter.no" target="_blank">Trustpilot</a>
+        </div>
+        <!-- End TrustBox widget -->

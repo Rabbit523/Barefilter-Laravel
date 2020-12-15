@@ -77,8 +77,9 @@
                         </td>
 
                         <td>
-                            <strong ng-if="product.processed">Prosessert</strong>
-                            <strong ng-if="!product.processed">Ikke prosessert</strong>
+                            <strong ng-if="product.processed == 0">Ikke Prosessert</strong>
+                            <strong ng-if="product.processed == 1">Prosessert</strong>
+                            <strong ng-if="product.processed == 2">Ikke eldre prosessert</strong>
                         </td>
                         <td class="controls">
                             </button>

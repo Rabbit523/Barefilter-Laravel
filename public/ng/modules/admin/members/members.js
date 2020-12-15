@@ -19,10 +19,10 @@ admin.controller("membersController", ["$rootScope", "$scope", "$state", 'barefi
         return (user.phone !== "") ? user.phone : "No phone";
     };
 
-    $scope.$watch('searchQuery', function (val) {
+    // $scope.$watch('searchQuery', function (val) {
 
-        search();
-    });
+    //     search();
+    // });
 
     $scope.delete = function (user) {
         if (confirm("Are you sure you want to delete this member?")) {

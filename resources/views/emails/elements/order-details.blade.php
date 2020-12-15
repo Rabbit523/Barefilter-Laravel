@@ -1,57 +1,53 @@
 <tr>
-    <td bgcolor="#EDEFF0" height="2" style=" display: block; margin-bottom: 20px; margin-top: 20px;"></td>
+    <td bgcolor="#EDEFF0" height="2" style=" padding-left: 20px; padding-right: 20px;display: block; margin-bottom: 20px; margin-top: 0px;"></td>
 </tr>
 
 
 <tr>
-    <td style="font-family: 'Open Sans', 'Helvetica', sans-serif;">
+    <td style="padding-left: 20px; padding-right: 20px;font-family: 'Roboto', sans-serif;">
         <table cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse;">
             <tr>
-                <td width="70%" valign="top">
-                    <p style="margin:0; padding: 0;">Kundenummer :
-                        <span style="color:#6082B7;">{{$order->user->id}}</span>
+                <td width="50%" valign="top">
+                    <p style="margin:0; padding: 0;font-size: 15px;">Kundenummer :
+                        <span style="color:#2568ad;">{{$order->user->id}}</span>
                     </p>
-                    <p style="margin:0; padding: 0;">Ordrenummer :
-                        <span style="color:#6082B7;">{{$order->identifier}} </span>
+                    <p style="margin:0; padding: 0;font-size: 15px;">Ordrenummer :
+                        <span style="color:#2568ad;">{{$order->identifier}} </span>
                     </p>
-
-                    <a href="{{route('login')}}" style="font-family: 'Open Sans', 'Helvetica', sans-serif; display: block; text-decoration: none; line-height: 40px; border-style: solid; border-width:2px;border-radius:5px;background-color:#26AEE4;height:40px;width: 200px; text-align: center; font-size:14px; color:white; margin-top: 10px;">
-                        Gå til Kundeportal</a>
-
-
+                    <a href="{{url('/')}}/logg-inn" target="_blank" style="font-family: 'Roboto', sans-serif; display: block; text-decoration: none; line-height: 40px; border-style: solid; border-width:0px;border-radius:5px;background-color:#26AEE4;height:40px;width: 100px; text-align: center; font-size:15px; color:white; margin-top: 40px;">Min Side</a>
                 </td>
-                <td width="30%">
+                <td width="50%">
                     <table cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse;">
                         <tr>
-                            <td width="30%" align="right" style="padding-right:20px; font-size: 14px;">
+                            <td width="30%" align="right" style="padding-right:10px;">
                                 <p style="margin:0; padding: 0;">Varer</p>
                                 <p style="margin:0; padding: 0;">Frakt</p>
-                                <p style="margin:0; padding: 0;">Rabatt</p>
-                                @if($order->properties->netaxept === "false")
-                                <p style="margin:0; padding: 0;">Fakturagebyr</p>@endif
+                                @if($order->properties->summary->discount > 0)
+                                    <p style="margin:0; padding: 0;">Rabatt</p>
+                                @endif
+                                @if($order->properties->netaxept === "false" || $order->properties->netaxept === false)
+                                    <p style="margin:0; padding: 0;">Fakturagebyr</p>
+                                @endif
                                 <p style="margin:0; padding: 0;">25% MVA</p>
                                 <p style="margin:0; padding: 0;">
                                     <strong>Totalpris</strong>
                                 </p>
                             </td>
-                            <td width="30%" align="left" style="font-size: 14px;">
-                                <p style="margin:0; padding: 0;">kr {{$order->properties->summary->goods}},-</p>
-                                @if($configuration->free_shipping && ($order->properties->summary->goods > $configuration->free_shipping_amount))
+                            <td width="20%" align="right">
+                                <p style="margin:0; padding: 0;">kr {{$order->properties->summary->goods}}</p>
+                                @if($configuration->free_shipping && ($order->properties->summary->subtotal > $configuration->free_shipping_amount))
                                     <p style="margin:0; padding: 0;">Gratis</p>
                                 @else
-                                    <p style="margin:0; padding: 0;">kr {{$order->properties->summary->shipping}},-</p>
+                                    <p style="margin:0; padding: 0;">kr {{$order->properties->summary->shipping}}</p>
                                 @endif
-                                <p style="margin:0; padding: 0;">kr {{$order->properties->summary->discount}},-</p>
-                                @if($order->properties->netaxept === "false")
-                                <p style="margin:0; padding: 0;">kr 35,-</p>@endif
+                                @if($order->properties->summary->discount > 0)
+                                    <p style="margin:0; padding: 0;">kr {{$order->properties->summary->discount}}</p>
+                                @endif
+                                @if($order->properties->netaxept === "false" || $order->properties->netaxept === false)
+                                <p style="margin:0; padding: 0;">kr 35</p>@endif
                                 
-                                <p style="margin:0; padding: 0;">kr {{$order->properties->summary->tax}},-</p>
-
-                                @if($configuration->free_shipping && ($order->properties->summary->goods > $configuration->free_shipping_amount))
-                                    <p style="margin:0; padding: 0;"><strong>kr {{$order->properties->summary->goods + 35}},-</strong></p>
-                                @else
-                                    <p style="margin:0; padding: 0;"><strong>kr {{$order->total}},-</strong></p>
-                                @endif
+                                <p style="margin:0; padding: 0;">kr {{$order->properties->summary->tax}}</p>
+                                <p style="margin:0; padding: 0;"><strong>kr {{$order->total}}</strong></p>
                             </td>
                         </tr>
                     </table>
@@ -63,11 +59,11 @@
 
 
 <tr>
-    <td bgcolor="#EDEFF0" height="2" style=" display: block; margin-bottom: 20px; margin-top: 20px;"></td>
+    <td bgcolor="#EDEFF0" height="2" style=" padding-left: 20px; padding-right: 20px;display: block; margin-bottom: 20px; margin-top: 20px;"></td>
 </tr>
 
 <tr>
-    <td style="font-family: 'Open Sans', 'Helvetica', sans-serif;">
+    <td style="padding-left: 20px; padding-right: 20px;font-family: 'Roboto', sans-serif;">
         <table cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse;">
             @foreach ($order->products as $orderProduct)
             <tr>
@@ -77,18 +73,35 @@
                         />
                     </a>
                 </td>
-                <td width="78%" valign="top">
-                    <p style="margin:0; padding: 0; color:#1F54A3; font-size: 14px; ">{{$orderProduct->product->name}}</p>
-                    <p style="margin:0; padding: 0; color: #aaa;">Varenummer: {{$orderProduct->product->sku}}</p>
-                    <p style="margin:0; padding: 0; color: #aaa;">Antall: {{$orderProduct->amount}}</p>
-                    <p style="margin:0; padding: 0; color: #aaa;">{{$orderProduct->subscription->name}}</p>
-
+                <td width="70%" valign="top">
+                    <p style="margin:0; padding: 0; color:#2568ad; font-size: 15px; "><strong>{{$orderProduct->product->name}}</strong></p>
+                    <p style="margin:0; padding: 0; color: #000000;font-size: 13px;">Varenummer: {{$orderProduct->product->sku}}</p>
+                    <p style="margin:0; padding: 0; color: #000000;font-size: 13px;">Antall: {{$orderProduct->amount}}</p>
+                    @if($order->payment_method_id === 1)
+                    <p style="margin:0; padding: 0; color: #000000;font-size: 13px;">Betaling med Netaxept</p>
+                    @endif @if($order->payment_method_id === 2)
+                    <p style="margin:0; padding: 0; color: #000000;font-size: 13px;">Betaling med Faktura</p>
+                    @endif
+                    <p style="margin:0; padding: 0; color: #000000;font-size: 13px;">Frakt : {{$order->properties->tas}}</p>
+                    @if(isset($order->properties->service_partner) && $order->properties->service_partner !== null)
+                    <p style="margin:0; padding: 0; color: #000000;font-size: 13px;">Pickup Point : {{$order->properties->service_partner->name}}</p>
+                        @if(isset($order->properties->service_partner->address))
+                            <p style="margin:0; padding: 0; color: #000000;font-size: 13px;">Adresse : {{$order->properties->service_partner->address}}</p>
+                        @elseif(isset($order->properties->service_partner->address1))
+                            <p style="margin:0; padding: 0; color: #000000;font-size: 13px;">Adresse : {{$order->properties->service_partner->address1}}</p>
+                        @endif
+                    @endif 
+                    @if(isset($order->properties->company) && $order->properties->company !== null)
+                    <p style="margin:0; padding: 0; color: #000000;font-size: 13px;">{{isset($order->properties->company->name) ? $order->properties->company->name : '' }}</p>
+                    <p style="margin:0; padding: 0; color: #000000;font-size: 13px;">{{isset($order->properties->company->number) ? $order->properties->company->number : ''}}</p>
+                    @endif
+                    <p style="margin:0 0 25px 0; padding: 0; color: #000000;font-size: 13px;">{{$orderProduct->subscription->name}}</p>
                 </td>
-                <td width="10%" valign="top">
+                <td width="18%" valign="top">
                     @if($orderProduct->amount == 1)
-                    <p style="margin:0; padding: 0; color: #aaa;">kr {{$orderProduct->product->price}},-</p>@endif @if($orderProduct->amount > 1)
-                    <p style="margin:0; padding: 0; color: #aaa;">{{$orderProduct->amount}} stk.
-                        <br>kr {{$orderProduct->product->price * $orderProduct->amount}},-</p>@endif
+                    <p style="margin:0; padding: 0; color: #000000;font-weight: bold;" align="right" >kr {{$orderProduct->product->price}}</p>@endif 
+                    @if($orderProduct->amount > 1)
+                    <p style="margin:0; padding: 0; color: #000000;font-weight: bold;" align="right" >kr {{$orderProduct->product->price * $orderProduct->amount}}</p>@endif
                 </td>
             </tr>
             @endforeach
@@ -96,76 +109,42 @@
     </td>
 </tr>
 
+@if (isset($order->properties->notes) && $order->properties->notes !== null)
 <tr>
-    <td bgcolor="#EDEFF0" height="2" style=" display: block; margin-bottom: 20px; margin-top: 20px;"></td>
+    <td bgcolor="#EDEFF0" height="2" style=" display: block; margin-bottom: 10px; margin-top: 10px;"></td>
 </tr>
 
 <tr>
-    <td style="font-family: 'Open Sans', 'Helvetica', sans-serif;">
+    <td style="padding-left: 20px; padding-right: 20px;font-family: 'Roboto', sans-serif;">
         <table cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse;">
             <tr>
-                <td width="50%" valign="top">
-                    <p style="color: #26AEE4; font-size: 18px; ">Leveringsadresse</p>
-                    <p style="margin:0; padding: 0; color: #aaa;">Send til:</p>
-                    <p style="margin:0; padding: 0;">{{$order->shipping->first_name}} {{$order->shipping->last_name}}</p>
-                    <p style="margin:0; padding: 0;">{{$order->shipping->street_address}}, {{$order->shipping->postal_code}} {{$order->shipping->city}}</p>
-                    <p style="margin:0; padding: 0;">Tlf: {{$order->shipping->phone}}</p>
-                    <p style="margin:0; padding: 0;">E-post: {{$order->shipping->email}}</p>
-                </td>
-                <td width="50%" valign="top">
-                    <p style="color: #26AEE4; font-size: 18px; ">Fakturaadresse</p>
-                    <p style="margin:0; padding: 0; color: #aaa;">Faktura til:</p>
-                    <!--<p style="margin:0; padding: 0;">FantasyLab DA</p>-->
-                    <p style="margin:0; padding: 0;">{{$order->billing->first_name}} {{$order->billing->last_name}}</p>
-                    <p style="margin:0; padding: 0;">{{$order->billing->street_address}}, {{$order->billing->postal_code}} {{$order->billing->city}}</p>
+                <td width="100%" valign="top">
+                    <p style="color: #26AEE4; font-size: 20px; ">Merknader</p>
+                    <p style="margin:0; padding: 0;font-size: 14px;">{{$order->properties->notes}}</p>
                 </td>
             </tr>
         </table>
     </td>
 </tr>
+@endif
 <tr>
-    <td style="font-family: 'Open Sans', 'Helvetica', sans-serif;">
-        <table cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse;">
-            <tr>
-                <td width="50%" valign="top">
-                    <p style="color: #26AEE4; font-size: 18px; ">
-                        <strong>Fraktmetode</strong>
-                    </p>
-                    <p style="margin:0; padding: 0; color: #aaa; font-size: 16px;">Valgt fraktmetode:</p>
-                    <p style="margin:0; padding: 0; font-size: 14px;">Frakt : {{$order->properties->tas}}</p>
-                    @if(isset($order->properties->service_partner) && $order->properties->service_partner !== null)
-                    <p style="margin:0; padding: 0; font-size: 14px;">Pickup Point : {{$order->properties->service_partner->name}}</p>
-                    <p style="margin:0; padding: 0; font-size: 14px;">Address : {{$order->properties->service_partner->address1}}</p>
-                    @endif @if(isset($order->properties->company) && $order->properties->company !== null)
-                    <p style="margin:0; padding: 0; font-size: 14px;">{{$order->properties->company->name}}</p>
-                    <p style="margin:0; padding: 0; font-size: 14px;">{{$order->properties->company->number}}</p>
-                    @endif
-                </td>
-                @if(isset($order->properties->notes) && $order->properties->notes !== "")
-                <td width="50%" valign="top">
-                    <p style="color: #26AEE4; font-size: 18px; ">Merknader</p>
-                    <p style="margin:0; padding: 0; color: #aaa;">Din merknad:</p>
-                    <p style="margin:0; padding: 0;">{{$order->properties->notes}}</p>
-                </td>
-                @endif
-            </tr>
-        </table>
-    </td>
+    <td bgcolor="#EDEFF0" height="2" style=" display: block; margin-bottom: 10px; margin-top: 10px;"></td>
 </tr>
 <tr>
-    <td style="font-family: 'Open Sans', 'Helvetica', sans-serif;">
+    <td style="padding-left: 20px; padding-right: 20px;font-family: 'Roboto', sans-serif;">
         <table cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse;">
             <tr>
                 <td width="50%" valign="top">
-                    <p style="color: #26AEE4; font-size: 18px; ">
-                        <strong>Betaling</strong>
-                    </p>
-                    <p style="margin:0; padding: 0; color: #aaa; font-size: 16px;">Betaling med:</p>
-                    @if($order->payment_method_id === 1)
-                    <p style="margin:0; padding: 0; font-size: 14px;">Netaxept</p>
-                    @endif @if($order->payment_method_id === 2)
-                    <p style="margin:0; padding: 0; font-size: 14px;">Faktura</p>
-                    @endif
+                    <p style="color: #26AEE4; font-size: 20px; ">Leveringsadresse</p>
+                    <p style="margin:0; padding: 0;font-size: 14px;">{{$order->shipping->first_name}} {{$order->shipping->last_name}}</p>
+                    <p style="margin:0; padding: 0;font-size: 14px;">{{$order->shipping->street_address}}, {{$order->shipping->postal_code}} {{$order->shipping->city}}</p>
+                    <p style="margin:0; padding: 0;font-size: 14px;">Tlf: {{$order->shipping->phone}}</p>
+                    <p style="margin:0; padding: 0;font-size: 14px;">E-post: {{$order->shipping->email}}</p>
+                </td>
+                <td width="50%" valign="top">
+                    <p style="color: #26AEE4; font-size: 20px; ">Fakturaadresse</p>
+                    <p style="margin:0; padding: 0;font-size: 14px;">{{$order->billing->first_name}} {{$order->billing->last_name}}</p>
+                    <p style="margin:0; padding: 0;font-size: 14px;">{{$order->billing->street_address}}, {{$order->billing->postal_code}} {{$order->billing->city}}</p>
                 </td>
             </tr>
         </table>
@@ -173,5 +152,6 @@
 </tr>
 
 <tr>
-    <td bgcolor="#EDEFF0" height="2" style=" display: block; margin-bottom: 20px; margin-top: 20px;"></td>
+    <td bgcolor="#EDEFF0" height="2" style="padding-left: 20px; padding-right: 20px; display: block; margin-bottom: 10px; margin-top: 20px;">
+    </td>
 </tr>

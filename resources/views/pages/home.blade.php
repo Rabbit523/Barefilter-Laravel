@@ -1,4 +1,7 @@
-@extends('layouts.public') @section('title', 'Hjem') @section('content')
+@extends('layouts.public')
+@section('title', $title)
+@section('description', $description)
+@section('content')
 <section class="barefilter-home content">
     <div class="container-fluid">
         <div class="row">
@@ -8,7 +11,7 @@
                     <ul>
                         @foreach ($residentialCategories as $c)
                             <li>
-                                <a href="{{route('store', ['type' => 'enebolig', 'category' => $c->handle])}}">Filter til {{$c->name}}</a>
+                                <a href="{{route('store', ['type' => 'enebolig', 'category' => $c->handle])}}">{{$c->name}}</a>
                             </li>
                         @endforeach
                     </ul>
@@ -32,7 +35,6 @@
                             <div class="overlay">
                                 <div class="overlay-content">
                                     {!! $content->section_one->text !!}
-                                    <button type="button" class="barefilter-btn">Start Live Chat</button>
                                 </div>
                             </div>
                         </div>

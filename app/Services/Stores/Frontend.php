@@ -25,7 +25,8 @@ class Frontend
         $industrialProductType = ProductType::where('handle', 'industribygg')->first();
         if($residentialProductType && $industrialProductType){
             $result = [
-                "title" => "",
+                "title" => isset($page->title) ? $page->title : "Hjem",
+                "description" => isset($page->description) ? $page->description : "Description",
                 "page" => "Hjem",
                 "content" => json_decode($page->content),
                 "subscriptions" => Subscription::where('id', '>', 0)->get(),
@@ -59,9 +60,10 @@ class Frontend
                 "categories" => ProductCategory::where(["type_id" => $productType->id, "parent_id" => 0])->orderBy('priority', 'asc')->get(),
             ];
             $productCategory = ProductCategory::where('handle', $category)->first();
-            
             if($productCategory){
-                $result["title"] = $productCategory->name;
+                $result["title"] = isset($productCategory->meta_title) ? $productCategory->meta_title : $productCategory->name;
+                $result["description"] = isset($productCategory->meta_description) ? $productCategory->meta_description : "";
+                $result["keywords"] = isset($productCategory->meta_keywords) ? $productCategory->meta_keywords : "";
                 $result["category"] = $productCategory;
                 $result["products"] = Product::where('category_id', $productCategory->id)->with("images")->paginate(12);
                 $result["children"] = ProductCategory::where('parent_id', $productCategory->id)->with("products.images")->get();
@@ -77,7 +79,9 @@ class Frontend
         $product = Product::where('handle', $handle)->with(["category", "images"])->first();
         if($product){
             $result = [
-                "title" => $product->name,
+                "title" => isset($product->meta_title) ? $product->meta_title : $product->name,
+                "description" => isset($product->meta_description) ? $product->meta_description : "",
+                "keywords" => isset($product->meta_keywords) ? $product->meta_keywords : "",
                 "page" => "store",
                 "subscriptions" => Subscription::where('id', '>', 0)->get(),
                 "product" => $product,

@@ -66,6 +66,9 @@ class Manager
             $category['name'] = $data['data']['name'];
             $category['description'] = $data['data']['description'];
             $category['parent_id'] = $data['data']['parent_id'];
+            $category['meta_title'] = $data['data']['meta_title'];
+            $category['meta_keywords'] = $data['data']['meta_keywords'];
+            $category['meta_description'] = $data['data']['meta_description'];
             $category->save();
             return $category;
         }
@@ -73,8 +76,9 @@ class Manager
 
     public static function getParentID(Request $request) {
         $data = $request->all();       
-        $category = ProductCategory::where('id', $data['parent_id'])->first();       
+        $category = ProductCategory::where('id', $data['parent_id'])->first();        
         $sub_data = null; $sub_sub_data = null;
+        
         if ($category->parent_id == '0') {
             $sub_data = $data;
         } 

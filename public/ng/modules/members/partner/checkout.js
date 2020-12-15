@@ -89,7 +89,7 @@ members.directive('partnerCheckout', ["$state", "usersService", "barefilterAPI",
                         }
                     });
                     data.shipping_methods.forEach(function(method){
-                        if(method.handle === "helthjem_dpd_domestic"){
+                        if(method.handle === "bring_bedr_dor_dor"){
                             shippingMethod = method;
                         }
                     });

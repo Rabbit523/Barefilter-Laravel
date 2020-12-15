@@ -1,4 +1,7 @@
-@extends('layouts.public') @section('title', 'Partner') @section('content')
+@extends('layouts.public') 
+@section('title', $title)
+@section('description', $description)
+@section('content')
 <section class="barefilter-subscription content">
     <div class="container-fluid">
 

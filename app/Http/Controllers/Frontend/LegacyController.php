@@ -12,7 +12,7 @@ class LegacyController extends Controller
 
     private function permanentlyMoveTo($url){
         header("HTTP/1.1 301 Moved Permanently"); 
-        header("Location: " . $url); 
+        header("Location: " . $url);
         exit();
     }
 
@@ -41,7 +41,7 @@ class LegacyController extends Controller
     }
 
     public function residentialStore() {
-        $this->permanentlyMoveTo(rroute('store', ["type" => "enebolig", "category" => "boventcovent"]));
+        $this->permanentlyMoveTo(route('store', ["type" => "enebolig", "category" => "boventcovent"]));
     }
 
     public function industrialStore() {

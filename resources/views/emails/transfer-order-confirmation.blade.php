@@ -10,7 +10,7 @@
         }
     </style>
 @endsection
-@section('title', 'Din ordre er bekreftet')
+@section('title', 'Overført til abonnement')
 @section('content')
 <tr>
     <td>
@@ -18,7 +18,7 @@
             <tr>
                 <td>
                     <table align="center" bgcolor="#FFFFFF" cellpadding="0" cellspacing="0" style="width: 100%; max-width: 650px;  padding-bottom: 20px; padding-left: 20px; padding-right: 20px; font-weight: 100; font-size:12px;">
-
+                        
                         @include('emails.elements.order-details', ['order' => $order])
                         <tr>
                             <td style="padding-left: 20px; padding-right: 20px;font-family: 'Roboto', sans-serif;font-size: 14px;">
@@ -35,7 +35,6 @@
                                 <img src="{{url('/')}}/img/tryggehandel.png"></img>
                             </td>
                         </tr>
-
                     </table>
                 </td>
             </tr>
@@ -43,4 +42,13 @@
     </td>
 
 </tr>
+@endsection
+@section('scripts')
+<script type="application/json+trustpilot">
+    {
+        "recipientEmail": "{{$order->user->email}}",
+        "recipientName": "{{$order->user->first_name . ' ' . $order->user->last_name}}",
+        "referenceId": "{{$order->user->id}}"
+    }
+</script>
 @endsection

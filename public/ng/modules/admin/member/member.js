@@ -49,7 +49,7 @@ admin.controller("memberController", ["$rootScope", "$scope", "$stateParams", 'b
             });
             data.shipping_methods.forEach(function(method){
                 method.price = (config.free_shipping) ? 0 : method.price;
-                if(method.handle === "helthjem_dpd_domestic"){
+                if(method.handle === "bring_bedr_dor_dor"){
                     shippingMethod = method;
                 }
             });

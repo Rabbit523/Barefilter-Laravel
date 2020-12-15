@@ -55,7 +55,7 @@ class Orders
             $query = ($user->role_id === User::$adminRole)
                     ? Order::whereDate('created_at', '>=', $start)->whereDate('created_at', '<=', $end)    
                     : Order::where('user_id', $user->id)->whereDate('created_at', '>=', $start)->whereDate('created_at', '<=', $end);
-            
+            ini_set('memory_limit', '-1');
             $response = $query->with(["shipping", "user", "products" => function ($q) use($sid){
                 if($sid !== '0'){
                     $q = $q->where('subscription_id', '=', $sid);

@@ -1,5 +1,6 @@
 @extends('layouts.public')
-@section('title', 'Om Oss')
+@section('title', $title)
+@section('description', $description)
 
 @section('content')
 <section class="barefilter-subscription content">
@@ -23,7 +24,17 @@
                         </div>
                     </div>
                 </div>
-
+                <div class="row">
+                    <div class="col-lg-12">
+                        <section class="barefilter-customer-service">
+                        <!-- TrustBox widget - Carousel -->
+                            <div class="trustpilot-widget" data-locale="nb-NO" data-template-id="53aa8912dec7e10d38f59f36" data-businessunit-id="5addc3555573e100014f796a" data-style-height="130px" data-style-width="100%" data-theme="light" data-stars="5">
+                                <a href="https://www.trustpilot.com/review/barefilter.no" target="_blank">Trustpilot</a>
+                            </div>
+                        <!-- End TrustBox widget -->
+                        </section>
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-lg-9">
                         <div class="description">

@@ -81,45 +81,30 @@ barefilterCheckout.directive('barefilterCheckout', [function () {
                 var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
                 return re.test(emailAddress);
             };
-            $scope.isValidPhone = function (phone) {
-                var re = /^\d{8}$/;
-                return re.test(phone);
-            };
-            $scope.isValidPostCode = function (postCode) {
-                var re = /^\d{4}$/;
-                return re.test(postCode);
-            }
             $scope.canMoveToShippingDetails = function () {
                 return ($scope.extras.guest) ?
-                    ($scope.hasValidAddresses()
-                        && $scope.isValidEmail($scope.shippingAddress.email)
-                        && $scope.isValidPhone($scope.shippingAddress.phone)
-                        && $scope.isValidPostCode($scope.shippingAddress.postal_code)) :
+                    //($scope.hasValidAddresses() && $scope.accountAvailable) : 
                     // true :
-                    ($scope.hasValidAddresses()
-                        && $scope.isValidEmail($scope.shippingAddress.email)
-                        && $scope.isValidPhone($scope.shippingAddress.phone)
-                        && $scope.isValidPostCode($scope.shippingAddress.postal_code)
-                        && $scope.accountAvailable);
-                // ($scope.hasValidAddresses() && $scope.isValidEmail($scope.shippingAddress.email));
+                    ($scope.hasValidAddresses() && $scope.isValidEmail($scope.shippingAddress.email) && $scope.accountAvailable) : ($scope.hasValidAddresses() && $scope.isValidEmail($scope.shippingAddress.email));
+                    // ($scope.hasValidAddresses() && $scope.isValidEmail($scope.shippingAddress.email));
             }
 
             $scope.isHomeDelivery = function () {
-                return shippingMethod.handle === "tg_home_delivery";
+                return shippingMethod.handle === "bring_pa_doren";
             };
 
             $scope.needsToSelectServicePartner = function () {
-                return shippingMethod.handle === "mypack";
+                return shippingMethod.handle === "bring_servicepakke";
             };
             $scope.needsToAddCompanyInfo = function () {
-                return shippingMethod.handle === "tg_stykkgods";
+                return shippingMethod.handle === "bring_bedr_dor_dor";
             };
 
             $scope.hasValidShippingMethod = function () {
                 if ($scope.needsToSelectServicePartner()) {
                     return $scope.selectedServicePartner !== null;
                 } else if ($scope.needsToAddCompanyInfo()) {
-                    return $scope.company.name !== undefined && $scope.company.number !== undefined && $scope.company.name !== "" && $scope.company.number !== "";
+                    return true;
                 } else if ($scope.isHomeDelivery()) {
                     return true;
                 } else {
@@ -159,7 +144,7 @@ barefilterCheckout.directive('barefilterCheckout', [function () {
                 shippingMethod = method;
                 updateTotals();
                 $scope.selectedShippingMethod = method.handle;
-                if (shippingMethod.handle === 'mypack') {
+                if (shippingMethod.handle === 'bring_servicepakke') {
                     loadPickupPoints();
                 } else {
                     $scope.selectedServicePartner = null;
@@ -188,15 +173,11 @@ barefilterCheckout.directive('barefilterCheckout', [function () {
 
             $scope.verifyAccountAvailability = function () {
                 if (!$scope.isLoggedIn()) {
-                    if ($scope.shippingAddress.email != '') {
-                        Barefilter.API.registered($scope.shippingAddress.email, function (response) {
-                            $scope.accountAvailable = response.success;
-                            if (!response.success) {
-                                $scope.registeredAccount = response.error.first_name + ' ' + response.error.last_name
-                            }
-                            $scope.$apply();
-                        }, function () { });
-                    }
+                    Barefilter.API.registered($scope.shippingAddress.email, function (response) {
+                        $scope.accountAvailable = response.success;
+                        $scope.registeredAccount = response.error.first_name + ' ' + response.error.last_name
+                        $scope.$apply();
+                    }, function () { });
                 }
             };
             $scope.loadShippingCity = function () {
@@ -220,7 +201,7 @@ barefilterCheckout.directive('barefilterCheckout', [function () {
             };
 
             $scope.hasFreeShipping = function () {
-                return config.free_shipping ? ($scope.totals.subtotal > config.free_shipping_amount) && shippingMethod.handle === 'helthjem_mypack' : false;
+                return config.free_shipping ? ($scope.totals.subtotal > config.free_shipping_amount) && shippingMethod.handle === 'bring_servicepakke' : false;
             };
 
             $scope.hasFreeShippingMethod = function () {
@@ -240,6 +221,7 @@ barefilterCheckout.directive('barefilterCheckout', [function () {
 
             $scope.placeOrder = function () {
                 var payload = getPayload();
+                return;
                 if ($scope.isLoggedIn()) {
                     payload.uid = user.id;
                 }
@@ -307,7 +289,6 @@ barefilterCheckout.directive('barefilterCheckout', [function () {
                     } else if (!$scope.extras.guest) {
                         redirect(response.data.redirect);
                     } else {
-                        redirect(response.data.redirect);
                         $scope.order = response.data.order;
                     }
                 }
@@ -350,6 +331,7 @@ barefilterCheckout.directive('barefilterCheckout', [function () {
             };
             var updateTotals = function () {
                 var totals = getTotals();
+                totals.shipping = shippingMethod.price;
                 var count = 0;
                 cart.getItems().forEach(function (i) {
                     count += i.total;
@@ -365,9 +347,10 @@ barefilterCheckout.directive('barefilterCheckout', [function () {
 
                 totals.tax = Math.round(totals.subtotal * 0.25); // dett inkluderer 25%
                 //totals.total = totals.subtotal + totals.tax;
-                totals.shipping = (config.free_shipping && totals.subtotal >= config.free_shipping_amount && shippingMethod.handle !== 'helthjem_mypack') ? 0 : shippingMethod.price;
                 totals.total = totals.subtotal;
-                totals.total += totals.shipping;
+                if (!config.free_shipping || totals.subtotal < config.free_shipping_amount || shippingMethod.handle !== 'bring_servicepakke') {
+                    totals.total += shippingMethod.price;
+                }
                 $scope.totals = totals;
             };
             var getSubscriptionDiscount = function (sid) {
@@ -401,15 +384,13 @@ barefilterCheckout.directive('barefilterCheckout', [function () {
                     $scope.cart = processResponse(response.data.products);
                     $scope.subscriptions = response.data.subscriptions;
                     $scope.paymentMethods = response.data.payment_methods;
-                    $scope.shippingMethods = response.data.shipping_methods
-                        .filter(method => !method.handle.includes('bring'))
-                        .map(function (method) {
-                            method.price = method.price;
-                            return method;
-                        });
-                    $scope.selectedShippingMethod = 'mypack';
+                    $scope.shippingMethods = response.data.shipping_methods.map(function (method) {
+                        method.price = method.price;
+                        return method;
+                    });
+                    $scope.selectedShippingMethod = 'bring_servicepakke';
                     paymentMethod = $scope.paymentMethods[0];
-                    $scope.shippingMethods.forEach(function (m) { if (m.handle === 'mypack') { shippingMethod = m; } });
+                    $scope.shippingMethods.forEach(function (m) { if (m.handle === 'bring_servicepakke') { shippingMethod = m; } });
 
                     updateTotals();
                     $scope.$apply();

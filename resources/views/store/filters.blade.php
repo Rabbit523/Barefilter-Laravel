@@ -1,4 +1,8 @@
-@extends('layouts.public') @section('title', $title) @section('content')
+@extends('layouts.public') 
+@section('title', $title) 
+@section('description', $description)
+@section('keywords', $keywords)
+@section('content')
 <section class="barefilter-store-industry content">
     <div class="container-fluid">
         <div class="row">
@@ -14,7 +18,7 @@
                     </ul>
                 </div>
             </div>
-            <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+            <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
                 <div class="col-lg-12">
                     <ol class="breadcrumb barefilter-breadcrumb">
                         <li>
@@ -44,12 +48,22 @@
                         </div>
                     </div>
                 </div>
+                @if (Request::is('nettbutikk/enebolig/filter-til-flexit') 
+                    || Request::is('nettbutikk/enebolig/filter-til-villavent-systemair')
+                    || Request::is('nettbutikk/enebolig/filter-til-heru'))
+                    <!-- TrustBox widget - Grid -->
+                    <div class="col-lg-12">
+                        <div class="trustpilot-widget" style="padding: 20px 0px; background: white;" data-locale="nb-NO" data-template-id="53aa8912dec7e10d38f59f36" data-businessunit-id="5addc3555573e100014f796a" data-style-height="130px" data-style-width="100%" data-theme="light" data-stars="5" data-schema-type="Organization">
+                            <a href="https://www.trustpilot.com/review/barefilter.no" target="_blank">Trustpilot</a>
+                        </div>
+                    </div>
+                    <!-- End TrustBox widget -->
+                @endif
                 @if($category->type_id == 1)
-                <h1>Filter til {{$category->name}}</h1>
+                <h1>{{$category->name}}</h1>
                 @else
                 <h1>{{$category->name}}</h1>
                 @endif
-
                 @if(isset($children) && count($children) > 0)
                     <div class="col-lg-12 col-md-12 col-sm-12 product-container-mobile">
                         <h3>Kategorier</h3>
@@ -60,6 +74,7 @@
                         </div>
                     </div>
                 @endif
+                
 
                 @if(isset($products) && count($products) > 0)
                     <div class="col-lg-12 col-md-12 col-sm-12 product-container-mobile">

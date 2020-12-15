@@ -46,6 +46,9 @@ class Manager
             $op->save();
             $orderSubscription = OrderSubscription::where(["order_id" => $op->order_id, "order_product_id" => $op->id])->first();
             self::processSubscription(Order::find($op->order_id), $op);
+
+            $properties = ["order_id" => $op->order_id];
+            Tasks::add(Task::$transferOrderConfirmationEmail, $properties);
         }
         return $op;
     }
@@ -206,9 +209,9 @@ class Manager
     private static function processSubscription($order, $orderProduct){
         $date = new \DateTime($order->created_at);
         $subscriptions = array();
-        if($orderProduct->subscription_id === 2){
+        if($orderProduct->subscription_id === "2"){
             array_push($subscriptions, self::addOrderSubscription($order->id, $orderProduct->id, $date->modify('+12 month')));
-        }elseif($orderProduct->subscription_id === 3){
+        }elseif($orderProduct->subscription_id === "3"){
             array_push($subscriptions, self::addOrderSubscription($order->id, $orderProduct->id, $date->modify('+6 month')));
             array_push($subscriptions, self::addOrderSubscription($order->id, $orderProduct->id, $date->modify('+6 month')));
         }

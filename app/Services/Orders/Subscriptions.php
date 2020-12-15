@@ -7,6 +7,7 @@ use App\Models\Orders\OrderProduct;
 use App\Models\Orders\OrderSubscription;
 use App\Models\Orders\ShippingMethod;
 use App\Models\Orders\PaymentMethod;
+use app\Models\Core\Setting;
 
 use App\Models\Core\Task;
 use App\Services\Core\Tasks;
@@ -108,9 +109,12 @@ class Subscriptions{
         $cost = $cost - round($cost * $subscription->discount * 0.01);
         $discount = $goods - $cost;
         
-        $shipping = self::getShippingCost($order);
+        $setting = Setting::first();
+
         $payment = self::getPaymentCost();
-        $subtotal = $cost + $shipping + $payment; 
+        $shipping = ($setting->configuration->free_shipping && $cost > $setting->configuration->free_shipping_amount) 
+            ? 0 : self::getShippingCost($order);
+        $subtotal = $cost + $shipping + $payment;
 
         return [
             "tax" => round($subtotal * 0.25),
@@ -145,7 +149,7 @@ class Subscriptions{
         $orderProductData = array(
             "order_id" => $newOrder->id,
             "product_id" => $orderProduct->product_id,
-            "subscription_id" => 0,
+            "subscription_id" => $orderProduct->subscription_id,
             "amount" => $orderProduct->amount
         );
         OrderProduct::create($orderProductData);

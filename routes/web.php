@@ -13,7 +13,7 @@
 Route::middleware('web')->group(function () {
     Route::get('/', 'Frontend\PagesController@index')->name("home");
     Route::get('/dashboard', 'Frontend\PagesController@dashboard')->name("dashboard");
-    Route::get('/order-completed/{orderId?}', 'Frontend\PagesController@orderCompleted')->name("order-completed");
+    Route::get('/takk', 'Frontend\PagesController@orderCompleted')->name("order-completed");
     Route::get('/abonnement', 'Frontend\PagesController@subscription')->name('subscription');
     Route::get('/partner', 'Frontend\PagesController@partner');
     Route::get('/om-oss', 'Frontend\PagesController@about')->name("about");

@@ -31,7 +31,10 @@ class Exporter
                     "product" => $orderProduct->product, 
                     "subscription" => $orderProduct->subscription, 
                     "shipping" => $order->shipping, 
-                    "billing" => $order->billing
+                    "billing" => $order->billing,
+                    "email" => $order->user->email,
+                    "name" => $order->user->first_name . ' ' .  $order->user->last_name,
+                    "uid" => $order->user->id
                 ], $sheet, $row)){
                     $row++;
                 }
@@ -40,8 +43,8 @@ class Exporter
     }
 
     private static function writeSpreadsheetHeader($sheet){
-        $cols = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
-        $headings = ["Order ID", "Delivery Month", "Order Date", "Product", "SKU", "Price", "Qty", "Subscription", "Shipping Address", "Billing Address"];
+        $cols = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M'];
+        $headings = ["Order ID", "Delivery Month", "Order Date", "Product", "SKU", "Price", "Qty", "Subscription", "Shipping Address", "Billing Address", "User Email", "User Name", "User ID"];
         for($i = 0; $i < count($cols); $i++){
             $sheet->getColumnDimension($cols[$i])->setAutoSize(true);
             $sheet->setCellValueByColumnAndRow($i + 1, 1, $headings[$i]);
@@ -64,6 +67,10 @@ class Exporter
             $sheet->setCellValueByColumnAndRow(8, $row, $subscription->name);
             $sheet->setCellValueByColumnAndRow(9, $row, self::getAddressString($data["shipping"]));
             $sheet->setCellValueByColumnAndRow(10, $row, self::getAddressString($data["billing"]));
+            $sheet->setCellValueByColumnAndRow(11, $row, $data["email"]);
+            $sheet->setCellValueByColumnAndRow(12, $row, $data["name"]);
+            $sheet->setCellValueByColumnAndRow(13, $row, $data["uid"]);
+
         }
         return $result;
     }
@@ -85,13 +92,13 @@ class Exporter
     }
     private static function getAddressString($address){
         return sprintf('%s %s, %s, %s | %s, %s, %s'
-            , $address->first_name
-            , $address->last_name
-            , $address->email
-            , $address->phone
-            , $address->street_address
-            , $address->postal_code
-            , $address->city
+            , isset($address->first_name) ? $address->first_name : 'N/A'
+            , isset($address->last_name) ? $address->last_name : 'N/A'
+            , isset($address->email) ? $address->email : 'N/A'
+            , isset($address->phone) ? $address->phone : 'N/A'
+            , isset($address->street_address) ? $address->street_address : 'N/A'
+            , isset($address->postal_code) ? $address->postal_code : 'N/A'
+            , isset($address->city) ? $address->city : 'N/A'
         );
     }
 

@@ -39,6 +39,12 @@ class Order extends Model
     {
         return $this->hasMany('App\Models\Orders\OrderProduct');
     }
+    
+    public function productsCount()
+    {
+        // return $this->products()->selectRaw('count(*) as total')->groupBy('product_id');
+        return $this->products()->selectRaw('order_id, sum(amount)')->groupBy('product_id');
+    }
 
     public function shipping()
     {

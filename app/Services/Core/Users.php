@@ -146,12 +146,14 @@ class Users
 
     private static function searchByRole($q, $roleId)
     {
+        $parts = explode(' ', $q);
         $q = '%' . $q . '%';
         return User::where('role_id', $roleId)
-            ->where(function ($query) use ($q) {
-                $query->where('first_name', 'like', $q)
-                ->orWhere('last_name', 'like', $q)
+            ->where(function ($query) use ($q, $parts) {
+                $query->where('first_name', 'like', '%' . $parts[0] . '%')
+                ->where('last_name', 'like', '%' . $parts[count($parts) > 1 ? 1 : 0] . '%')
                 ->orWhere('email', 'like', $q);
+                // ->orWhere(DB::raw(CONCAT_WS(' ', first_name, last_name)), 'like', $q);
             })
             ->get();
     }
@@ -226,7 +228,7 @@ class Users
     public static function registered($email)
     {
         $user = User::where('email', $email)->first();
-        return ($user !== null) ? ["error" => "User already registered"] : "You're good to go!";
+        return ($user !== null) ? ["error" => $user] : "You're good to go!";
     }
 
     public static function processOrderUser($data)
@@ -257,6 +259,8 @@ class Users
                     Tasks::add(Task::$automaticSignUpEmail, $properties);
                     Auth::login($user);
                 }
+            } else {
+                Auth::login($user);
             }
         }
         return $user;

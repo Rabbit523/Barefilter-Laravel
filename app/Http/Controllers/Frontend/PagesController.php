@@ -9,6 +9,9 @@ use App\Services\Stores\Frontend as Stores;
 use App\Services\Core\Frontend as Pages;
 use App\Services\Orders\Orders;
 
+use App\Models\Orders\Order;
+
+
 class PagesController extends Controller
 {
 
@@ -63,7 +66,10 @@ class PagesController extends Controller
         return view('pages.tos', Pages::getTosPage());
     }
 
-    public function orderCompleted($orderId = null) {
-        return view("pages.order-completed", ["page" => "order-completed", "order" => Orders::search($orderId)]);
+    public function orderCompleted() {
+        return view("pages.order-completed", ["page" => "order-completed", 
+            "order" => Order::orderBy('id', 'desc')
+            ->with(["shipping", "user", "products.product", "products.subscription", "products.product.images"])->first()
+        ]);
     }
 }

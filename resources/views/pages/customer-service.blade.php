@@ -1,4 +1,7 @@
-@extends('layouts.public') @section('title', 'Kundeservice') @section('content')
+@extends('layouts.public') 
+@section('title', $title)
+@section('description', $description)
+@section('content')
 <section class="barefilter-customer-service content">
     <div class="container-fluid">
         <ol class="breadcrumb barefilter-breadcrumb">
@@ -44,7 +47,14 @@
 
     </div>
 </section>
-<section class="barefilter-faq">
+<section class="barefilter-customer-service content">
+<!-- TrustBox widget - Carousel -->
+    <div class="trustpilot-widget" data-locale="nb-NO" data-template-id="53aa8912dec7e10d38f59f36" data-businessunit-id="5addc3555573e100014f796a" data-style-height="130px" data-style-width="100%" data-theme="light" data-stars="5">
+        <a href="https://www.trustpilot.com/review/barefilter.no" target="_blank">Trustpilot</a>
+    </div>
+<!-- End TrustBox widget -->
+</section>
+<section class="barefilter-faq content">
 
     <div class="content">
         <!-- Nav tabs -->

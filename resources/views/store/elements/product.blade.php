@@ -3,7 +3,7 @@
         <div class="product-image">
             <img src='{{$product->images->get(0)["url"]}}' alt="{{$product->name}}" />
             <div class="overlay">
-                <button type="button" class="barefilter-btn product-preview-button" data-handle="{{$product->handle}}">Rask Visning</button>
+                <!-- <button type="button" class="barefilter-btn product-preview-button" data-handle="{{$product->handle}}">Rask Visning</button> -->
             </div>
         </div>
         <div class="product-description">

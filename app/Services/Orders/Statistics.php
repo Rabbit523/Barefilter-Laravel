@@ -16,27 +16,36 @@ class Statistics
 
     public static function getAggregates($start, $end){
 
-        $query = Order::whereDate('created_at', '>=', $start)->whereDate('created_at', '<=', $end);
+        $query = Order::whereDate('created_at', '>=', $start)->whereDate('created_at', '<=', $end)->where('status', '<=', '3')->where('status', '>=', '2');
         
-        $response = $query->with(["shipping", "user", "products" => function ($q){
+        $response = $query->with(["products" => function ($q){
             $q->with(["product", "subscription"]);
-        }])->orderBy('created_at', 'desc')->get();
+        }])->get();
+        $total_onetime_purchases = 0;
+        $total_filter_package = 0;
+        foreach ($response as $order) {
+            foreach ($order->products as $product) {
+                $total_filter_package += $product->amount;
+                if ($product->subscription_id == 1) {
+                    $total_onetime_purchases++;
+                }
+            }
+        }
         return [
-            "orders" => Order::whereDate('created_at','>=', $start)->whereDate('created_at', '<=', $end)->count(),
-            "sales" => Order::whereDate('created_at','>=', $start)->whereDate('created_at', '<=', $end)->sum('total'),
-            "discounts" => Order::whereDate('created_at','>=', $start)->whereDate('created_at', '<=', $end)->sum('discount'),
-            "total_onetime_purchases" => $response,
-            "filter_packages_purchases" => DB::table('orders')->whereDate('orders.created_at','>=', $start)->whereDate('orders.created_at', '<=', $end)->where('status', '1')
-                    ->join('order_products', 'orders.id', '=', 'order_products.order_id')->selectRaw('sum(order_products.amount) as cnt')->first(),
-            "total_subscriptions" => Order::whereDate('created_at','>=', $start)->whereDate('created_at', '<=', $end)
+            "orders" => Order::whereDate('created_at','>=', $start)->whereDate('created_at', '<=', $end)->where('status', '<=', '3')->where('status', '>=', '2')->count(),
+            "sales" => Order::whereDate('created_at','>=', $start)->whereDate('created_at', '<=', $end)->where('status', '<=', '3')->where('status', '>=', '2')->sum('total'),
+            "discounts" => Order::whereDate('created_at','>=', $start)->whereDate('created_at', '<=', $end)->where('status', '<=', '3')->where('status', '>=', '2')->sum('discount'),
+            "total_onetime_purchases" => $total_onetime_purchases,
+            "filter_packages_purchases" => $total_filter_package,
+            "total_subscriptions" => Order::whereDate('created_at','>=', $start)->whereDate('created_at', '<=', $end)->where('status', '<=', '3')->where('status', '>=', '2')
                     ->whereHas('products', function ($query) {
                         $query->whereIn('subscription_id', ['2', '3']);
                     })->count(),
-            "total_onetime_subscriptions" => Order::whereDate('created_at','>=', $start)->whereDate('created_at', '<=', $end)
+            "total_onetime_subscriptions" => Order::whereDate('created_at','>=', $start)->whereDate('created_at', '<=', $end)->where('status', '<=', '3')->where('status', '>=', '2')
                     ->whereHas('products', function ($query) {
                         $query->whereIn('subscription_id', ['2']);
                     })->count(),
-            "total_twotime_subscriptions" => Order::whereDate('created_at','>=', $start)->whereDate('created_at', '<=', $end)
+            "total_twotime_subscriptions" => Order::whereDate('created_at','>=', $start)->whereDate('created_at', '<=', $end)->where('status', '<=', '3')->where('status', '>=', '2')
                     ->whereHas('products', function ($query) {
                         $query->whereIn('subscription_id', ['3']);
                     })->count(),
@@ -49,7 +58,7 @@ class Statistics
         $last = date("Y-12-31");
         $begin = date("1990-01-01");
         if (strcmp($start, $begin)==0) {
-            $days = Order::whereDate('created_at','>=', $start)->whereDate('created_at', '<=', $end)
+            $days = Order::whereDate('created_at','>=', $start)->whereDate('created_at', '<=', $end)->where('status', '<=', '3')->where('status', '>=', '2')
             ->get()
             ->groupBy(function($item){ return $item->created_at->format('Y'); });
             $histogram = array();
@@ -63,7 +72,7 @@ class Statistics
             }
             return $histogram;
         } else if ((strcmp($start, $first)==0) && (strcmp($last, $end)==0)) {
-            $days = Order::whereDate('created_at','>=', $start)->whereDate('created_at', '<=', $end)
+            $days = Order::whereDate('created_at','>=', $start)->whereDate('created_at', '<=', $end)->where('status', '<=', '3')->where('status', '>=', '2')
             ->get()
             ->groupBy(function($item){ return $item->created_at->format('Y-m'); });
             $histogram = array();
@@ -78,7 +87,7 @@ class Statistics
             }
             return $histogram;
         } else {
-            $days = Order::whereDate('created_at','>=', $start)->whereDate('created_at', '<=', $end)
+            $days = Order::whereDate('created_at','>=', $start)->whereDate('created_at', '<=', $end)->where('status', '<=', '3')->where('status', '>=', '2')
             ->get()
             ->groupBy(function($item){ return $item->created_at->format('Y-m-d'); });
 
@@ -135,14 +144,26 @@ class Statistics
         // ->groupBy('order_product_id')
         // ->get();
 
-        return DB::table('order_subscriptions')->whereDate('to_be_delivered_at', '>=', $start)
+        // return DB::table('order_subscriptions')->whereDate('to_be_delivered_at', '>=', $start)
+        //     ->whereDate('to_be_delivered_at', '<=', $end)
+        //     ->join('order_products', function($join) {
+        //         $join->on('order_products.id', '=', 'order_product_id')
+        //             ->join('products', function($join) {
+        //                 $join->on('products.id', '=', 'order_products.product_id');
+        //             });
+                // ->join('products', 'products.id', '=', 'order_products.product_id');
+            // })
+            // ->join('order_products', 'order_product_id', '=', 'order_products.id')
+            // ->join('product_categories', 'product_categories.id', '=', 'products.category_id')
+            // ->join('product_images', 'product_images.product_id', '=', 'products.id')
+            // ->groupBy('order_products.product_id')
+            // ->select('*', DB::raw('sum(order_products.amount) as orderproducts_total'), 'product_categories.name as category_name')
+            // ->select('*')
+            // ->get();
+        return OrderSubscription::whereDate('to_be_delivered_at', '>=', $start)
             ->whereDate('to_be_delivered_at', '<=', $end)
-            ->join('order_products', 'order_products.id', '=', 'order_product_id')
-            ->join('products', 'products.id', '=', 'order_products.product_id')
-            ->join('product_categories', 'product_categories.id', '=', 'products.category_id')
-            ->join('product_images', 'product_images.product_id', '=', 'products.id')
-            ->groupBy('order_products.product_id')
-            ->select('*', DB::raw('sum(order_products.amount) as total'), 'product_categories.name as category_name', 'products.name as product_name')
+            ->with(["order.shipping", "orderProduct.product", "orderProduct.subscription", "orderProduct.product.category", "orderProduct.product.images"])
+            ->orderBy('to_be_delivered_at', 'asc')
             ->get();
         return $data;
     }

@@ -21,23 +21,26 @@ $partner_logo = ($partner) ? Auth::user()->partnerlogo: "undefined_logo";
         <div class="content">
             <div class="container-fluid">
                 <div class="row">
-                  <div class="col-lg-8 hidden-xs">
+                  <div class="col-lg-9 col-md-10 hidden-xs">
                       <p>
                         @if ($configuration->free_shipping)
-                            <i style="color: #98d609;"  class="fa fa-check-circle"></i>&nbsp;Gratis frakt over kr {{$configuration->free_shipping_amount}},-&nbsp;&nbsp;&nbsp;&nbsp;
+                            <i style="color: #98d609;"  class="fa fa-check-circle"></i>&nbsp;Gratis frakt over kr {{$configuration->free_shipping_amount}},-&nbsp;&nbsp;
                         @else
-                            <i style="color: #98d609;"  class="fa fa-check-circle"></i>&nbsp;Gratis frakt er av&nbsp;&nbsp;&nbsp;&nbsp;
+                            <i style="color: #98d609;"  class="fa fa-check-circle"></i>&nbsp;Gratis frakt er av&nbsp;&nbsp;
                         @endif
-                        <i style="color: #98d609;"  class="fa fa-check-circle"></i>&nbsp;30 dager returrett&nbsp;&nbsp;&nbsp;&nbsp;
-                        <i style="color: #98d609;" class="fa fa-check-circle"></i>&nbsp;Eurovent godkjent produsent&nbsp;&nbsp;&nbsp;&nbsp;
-                        <i style="color: #98d609;"  class="fa fa-check-circle"></i>&nbsp;Norskproduserte filter&nbsp;&nbsp;&nbsp;&nbsp;
-                        <i style="color: #98d609;"  class="fa fa-check-circle"></i>&nbsp;Rask Kundeservice&nbsp;&nbsp;&nbsp;&nbsp;
+                        <i style="color: #98d609;"  class="fa fa-check-circle"></i>&nbsp;30 dager returrett&nbsp;&nbsp;
+                        <i style="color: #98d609;"  class="fa fa-check-circle"></i>&nbsp;Alltid åpent&nbsp;&nbsp;
+                        <i style="color: #98d609;" class="fa fa-check-circle"></i>&nbsp;Eurovent godkjent produsent&nbsp;&nbsp;
+                        <i style="color: #98d609;"  class="fa fa-check-circle"></i>&nbsp;Norskproduserte filter&nbsp;&nbsp;
+                        <i style="color: #98d609;"  class="fa fa-check-circle"></i>&nbsp;Rask Kundeservice&nbsp;&nbsp;
                       </p>
                   </div>
-                    <div class="col-lg-4 hidden-sm hidden-xs">
-                        <ul class="pull-right">
-                            <li><i class="fa fa-facebook"></i>&nbsp;&nbsp;<a href="https://www.facebook.com/barefilter/" target="_blank">Lik oss på Facebook</a></li>
-                        </ul>
+                    <div class="col-lg-3 col-md-2 hidden-sm hidden-xs">
+                        <div class="row">
+                            <ul class="pull-right" style="padding-left: 0px;">
+                                <li><i class="fa fa-facebook"></i>&nbsp;&nbsp;<a href="https://www.facebook.com/barefilter/" target="_blank">Lik oss på Facebook</a></li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -110,7 +113,7 @@ $partner_logo = ($partner) ? Auth::user()->partnerlogo: "undefined_logo";
                                     <span></span>
                                     <div class="information">
                                         <h3>Logg inn</h3>
-                                        <p>Din portal</p>
+                                        <p>Min Side</p>
                                     </div>
                                 </a>
                             </div>
@@ -127,14 +130,8 @@ $partner_logo = ($partner) ? Auth::user()->partnerlogo: "undefined_logo";
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-5 col-md-4 col-sm-9 col-xs-12" id="search-bar">
-                    <div class="navbar-header col-lg-0 col-md-0 col-sm-0 col-xs-3">
-                        <!-- <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                                <span class="sr-only">Toggle navigation</span>
-                                <span class="icon-bar"></span>
-                                <span class="icon-bar" style="width: 30px;"></span>
-                                <span class="icon-bar"></span>
-                            </button><span class="menu-name hidden-lg">MENY</span> -->
+                    <div class="col-lg-5 col-md-4 col-sm-12 col-xs-12" id="search-bar">
+                        <div class="navbar-header col-lg-0 col-md-0 col-sm-1 col-xs-3 hidden-lg hidden-md">
                             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"
                                 aria-expanded="false" id="btn-menu-1">
                                 <span class="sr-only">Toggle navigation</span>
@@ -150,13 +147,18 @@ $partner_logo = ($partner) ? Auth::user()->partnerlogo: "undefined_logo";
                                 <span class="icon-bar"></span>
                             </button><span class="menu-name hidden-lg">MENY</span>
                         </div>
-                        <div class="search-bar col-lg-12 col-md-12 col-sm-12 col-xs-9">
+                        <div class="search-bar col-lg-12 col-md-12 col-sm-6 col-xs-9">
                             <form action="{{route('search')}}">
                             <input type="text" class="search-input" id="search-query" name="q" placeholder="Søk etter kode, merke, modell, filterklasse og dimensjoner" value="{{request()->q}}">
                                 <button type="submit" class="btn search-button">
                                     <i class="fa fa-search" aria-hidden="true"></i>
                                 </button>
                             </form>
+                        </div>
+                        <div class="col-sm-5 hidden-xs hidden-lg hidden-md">
+                            <div style="margin-top: 15px;" class="trustpilot-widget" data-locale="nb-NO" data-template-id="5419b6ffb0d04a076446a9af" data-businessunit-id="5addc3555573e100014f796a" data-style-height="50px" data-style-width="100%" data-theme="dark">
+                                <a href="https://no.trustpilot.com/review/barefilter.no" target="_blank">Trustpilot</a>
+                            </div>
                         </div>
                     </div>
                     @endif

@@ -33,8 +33,9 @@
         <!-- End Hotjar Tracking Code for www.barefilter.no -->
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title>@yield('title') | Kvalitetsfilter til enebolig og industribygg - Barefilter.no</title>
-        <meta name="description" content="">
+        <title>@yield('title')</title>
+        <meta name="description" content="@yield('description')">
+        <meta name="keywords" content="@yield('keywords')">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="apple-touch-icon" href="apple-touch-icon.png">
 
@@ -44,16 +45,14 @@
         <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
         <script src="/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
 
-        <script>var config = @json($configuration); config.server = "<?= route("barefilter-api", [],false) ?>/"; config.token = "<?= csrf_token() ?>";</script>
-        <!--Start of Zendesk Chat Script-->
-        <script type="text/javascript">
-            window.$zopim||(function(d,s){var z=$zopim=function(c){z._.push(c)},$=z.s=
-            d.createElement(s),e=d.getElementsByTagName(s)[0];z.set=function(o){z.set.
-            _.push(o)};z._=[];z.set._=[];$.async=!0;$.setAttribute("charset","utf-8");
-            $.src="https://v2.zopim.com/?4YZS2GvFzfmqbb8nPvgTlJlA5xjEGn6e";z.t=+new Date;$.
-            type="text/javascript";e.parentNode.insertBefore($,e)})(document,"script");
-        </script>
-        <!--End of Zendesk Chat Script-->
+        <script>var config = @json($configuration); config.server = "<?=route("barefilter-api", [], false)?>/"; config.token = "<?=csrf_token()?>";</script>
+        <!-- Start of barefilter Zendesk Widget script -->
+        <script id="ze-snippet" src="https://static.zdassets.com/ekr/snippet.js?key=f2cf3a10-80dc-4397-82dc-411858d8ed6b"> </script>
+        <!-- End of barefilter Zendesk Widget script -->
+
+        <!-- TrustBox script -->
+            <script type="text/javascript" src="//widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js" async></script>
+        <!-- End Trustbox script -->
     </head>
     <body class="barefilter {{$page}}" @isset($ngApp) ng-app="{{$ngApp}}" @endisset>
         <!--[if lt IE 8]>

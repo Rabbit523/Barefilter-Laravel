@@ -24,8 +24,8 @@
                         </div>
                         <div class="col-lg-7 col-md-7 product-description">
                             <div class="btn-group">
-                                <button id="InStock" class="barefilter-btn light-green" style="padding: 5px 5px !important;">PA LAGER</button>
-                                <button id="OutStock" class="barefilter-btn light-red" style="padding: 5px 5px !important;">IKKE PA LAGER</button>
+                                <div id="InStock" style="display: block; font-size: 15px;"><strong>Lagerstatus</strong>:<strong style="color: #78c805;"> På lager - kan sendes nå</strong></div> 
+                                <div id="OutStock" style="display: block; font-size: 15px;"><strong>Lagerstatus</strong>:<strong style="color: #ff1d02;"> Ikke på lager</strong></div> 
                             </div>
                             <div class='product-title'>
                                 <p class="pull-right">
@@ -40,7 +40,9 @@
                                 </h3>
                                 <h3>Rammemål:<span id="Dimensions"></span></h3>
                                 <p>kr <span id="price"></span>,- <br><small id="discount">Du sparer: kr <span></span>,-</small></p>
+                                <img src="/img/tryggehandel.png" style="float: right; margin-right: 10px; margin-top: -30px; width: 70px;"></img>
                             </div>
+                            
                             <hr />
                             <section class="row info">
                                 <div class="col-lg-4 col-md-4">

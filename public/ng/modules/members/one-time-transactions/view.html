@@ -105,29 +105,25 @@
                                 </select>
                             </section>
                             <hr />-->
-                            <section>
-                                <h2>Velg filterabonnement</h2>
-                                <p>Vi leverer filter en eller to ganger i året</p>
-                                <select class="form-control" id="subcription-type-select" ng-options="type.name for type in subscriptionTypes track by type.id"
-                                    ng-change="updatePreview()" ng-model="selectedSubscription"></select>
-                            </section>
-                            <hr />
-                            <section id='amount-of-filters'>
-                                <h2>Antall filter</h2>
-                                <p>Ved kjøp av ekstra filter til dette sette, vil du bli redirektert videre til betaling</p>
-                                <div class="col-lg-6 col-md-6 col-sm-6 no-padding ">
-                                    <input type="number" ng-value="selectedProduct.amount" id='amount-filters' ng-model="selectedProduct.amount" ng-change="updatePreview()"
-                                    />
+                            <div class="row subscription">
+                                <div class="col-md-7 col-sm-6 col-xs-6">
+                                    <h2>Velg filterabonnement</h2>
+                                    <p>Vi leverer filter en eller to ganger i året</p>
+                                    <select class="form-control" id="subcription-type-select" ng-options="type.name for type in subscriptionTypes track by type.id"
+                                        ng-change="updatePreview()" ng-model="selectedSubscription"></select>
                                 </div>
-                                <div class="col-lg-6 col-md-6 col-sm-6">
-                                    <div class="cost">
-                                        <p>{{selectedProduct.price * selectedProduct.amount | number}},-/</p>
-                                        <p ng-if="newPrice > 0">{{newPrice | number}},-/</p>
+                                <div class="col-md-5 col-sm-6 col-xs-6" id='amount-of-filters'>
+                                        <h2>Ny Pris</h2>
+                                        <p>Ny Pris ved neste fakturering</p>
+        
+                                        <div class="cost">
+                                            <p>kr {{newPrice | number}},- ink. mva.</p>
+                                        </div>
+                                        <div class="clearfix"></div>
                                     </div>
-                                </div>
-                                <div class="clearfix"></div>
-                            </section>
+                            </div>
                             <hr />
+
                             <button class="barefilter-btn light-green pull-right" ng-click="transfer()"> Overfør til filterabonnement</button>
 
                         </div>

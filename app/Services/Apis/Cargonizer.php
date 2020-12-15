@@ -15,8 +15,14 @@ class Cargonizer extends CargonizerAbstract
             ->get()[0];
         if($order !== null){
             $consignments = self::createConsignment($order);
+            // if (strpos($order->properties->tas, 'bring') !== false) {
+            //     $returnConsignments = self::createReturnConsignment($order);
+            // }
             $response = new \stdClass();
             $response->consignment = $consignments["consignment"];
+            // if (strpos($order->properties->tas, 'bring') !== false) {
+            //     $response->returnConsignment = $returnConsignments["consignment"];
+            // }
             $extended = (object) array_merge((array) $order->properties, (array) $response);
             $order->properties = json_encode($extended);
             $order->status = (!isset($response->consignment["errors"])) ? Order::$readyForShipping : Order::$shippingError;
@@ -28,6 +34,19 @@ class Cargonizer extends CargonizerAbstract
     public static function createConsignment($order)
     {
         $consignment = self::getConsignmentXMLDescription($order, true);
+        return ($consignment != null) ? self::parseXMLString(
+            self::post(
+                self::$baseUrl . "consignments.xml", [
+                    "body" => $consignment,
+                    "headers" => self::getPostRequestHeaders()
+                ]
+            )
+        ) : ["error" => ""];
+    }
+
+    public static function createReturnConsignment($order)
+    {
+        $consignment = self::getReturnConsignmentXMLDescription($order, true);
         return ($consignment != null) ? self::parseXMLString(
             self::post(
                 self::$baseUrl . "consignments.xml", [
@@ -56,15 +75,21 @@ class Cargonizer extends CargonizerAbstract
                "country" => "NO",
                "postcode" => $postcode,
                "carrier" => "helthjem"
+            //    "carrier" => "bringa"
             ]
         );
         $response = self::parseXMLString(
             self::get(self::$baseUrl . "service_partners.xml", $parameters)
+            // self::get(self::$bringAPIUrl . $postcode . ".xml", ["query" => "none"])
         );
-        return ($response["errors"] === null) ? [
+        return ($response["service-partners"] !== null) ? [
             "partners" => $response["service-partners"]["service-partner"],
             "location" => $response["location"]
         ] : ["error" => $response["errors"]];
+        // bring pickup points
+        // return (!isset($response["error"])) ? [
+        //     "partners" => $response["pickupPoint"],
+        // ] : ["error" => $response["error"]];
     }
 
     public static function estimateShippingCost($order)

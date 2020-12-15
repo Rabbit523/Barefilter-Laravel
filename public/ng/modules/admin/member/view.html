@@ -1,13 +1,15 @@
 <div class="transactions-history" ng-class="{'loading': loading}">
-    <div class="transactions-title" ng-if="!creatingOrder">
-        <div class="row">
+    <form class="transactions-title" ng-if="!creatingOrder" ng-submit="editInfo()">
+        <div class="row" ng-show="!edit">
             <div class="col-sm-12">
                 <h1>{{user.first_name}} {{user.last_name}}</h1>
             </div>
             <div class="col-sm-4">
                 <h4>Kontaktinformasjon</h4>
-                <p><strong>E-postadresse:</strong> {{user.email}}</p>
-                <p><strong>Telefonnummer:</strong> {{getPhone(user)}}</p>
+                <p>
+                    <strong>E-postadresse:</strong> {{user.email}}</p>
+                <p>
+                    <strong>Telefonnummer:</strong> {{getPhone(user)}}</p>
             </div>
             <div class="col-sm-4">
                 <h4>Leveringsadresse</h4>
@@ -22,13 +24,81 @@
                 <p>{{user.billing.phone}}</p>
             </div>
         </div>
-        <div class="row" ng-if="hasOrders() && !creatingOrder">
-            <div class="col-sm-6 col-sm-offset-6 text-right" style="margin-top: 30px;">
-                <button type="button" class="barefilter-btn dark-blue-full" ng-click="createOrder()">Opprett ordre</button>
-
+        <div class="row" ng-show="edit">
+            <div class="col-sm-4">
+                <h1>Edit userinfo</h1>
+                <div class="form-group">
+                    <label>Fisrt name:</label>
+                    <input class="form-control" type="text" ng-model="user.first_name" required>
+                </div>
+                <div class="form-group">
+                    <label>Last name:</label>
+                    <input class="form-control" type="text" ng-model="user.last_name" required>
+                </div>
+                <div class="form-group">
+                    <label>email:</label>
+                    <input class="form-control" type="email" ng-model="user.email" required>
+                </div>
+                <div class="form-group">
+                    <label>Last name:</label>
+                    <input class="form-control" type="text" ng-model="user.phone" required>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <h1>Leveringsadresse</h1>
+                <div class="form-group">
+                    <label>Postal Code:</label>
+                    <input class="form-control" type="text" ng-model="user.shipping.postal_code" required>
+                </div>
+                <div class="form-group">
+                    <label>City:</label>
+                    <input class="form-control" type="text" ng-model="user.shipping.city" required>
+                </div>
+                <div class="form-group">
+                    <label>Street Address:</label>
+                    <input class="form-control" type="text" ng-model="user.shipping.street_address" required>
+                </div>
+                <div class="form-group">
+                    <label>Email:</label>
+                    <input class="form-control" type="email" ng-model="user.shipping.email" required>
+                </div>
+                <div class="form-group">
+                    <label>Phone:</label>
+                    <input class="form-control" type="text" ng-model="user.shipping.phone" required>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <h1>Fakturaadresse</h1>
+                <div class="form-group">
+                    <label>Postal Code:</label>
+                    <input class="form-control" type="text" ng-model="user.billing.postal_code" required>
+                </div>
+                <div class="form-group">
+                    <label>City:</label>
+                    <input class="form-control" type="text" ng-model="user.billing.city" required>
+                </div>
+                <div class="form-group">
+                    <label>Street Address:</label>
+                    <input class="form-control" type="text" ng-model="user.billing.street_address" required>
+                </div>
+                <div class="form-group">
+                    <label>Email:</label>
+                    <input class="form-control" type="email" ng-model="user.billing.email" required>
+                </div>
+                <div class="form-group">
+                    <label>Phone:</label>
+                    <input class="form-control" type="text" ng-model="user.billing.phone" required>
+                </div>
             </div>
         </div>
-    </div>
+        <div class="row" ng-if="hasOrders() && !creatingOrder">
+            <div class="col-sm-6 col-sm-offset-6 text-right" style="margin-top: 30px;">
+                <!-- <button type="button" class="barefilter-btn dark-blue-full" ng-if="!edit" ng-click="editInfo()" style="margin-right: 40px;">Redigere</button> -->
+                <button type="submit" class="barefilter-btn dark-blue-full" ng-if="edit" style="margin-right: 40px;">Lagre</button>
+                <button type="button" class="barefilter-btn dark-blue-full" ng-click="createOrder()">Opprett ordre</button>
+            </div>
+        </div>
+    </form>
 
 
     <div class="transactions-title" ng-if="creatingOrder">
@@ -48,7 +118,7 @@
             <div>
                 <img src="" alt="" />
                 <h3>Ingen ordre er opprettet</h3>
-                  <button type="button" class="barefilter-btn dark-blue" ng-click="createOrder()">Opprett ordre</button>
+                <button type="button" class="barefilter-btn dark-blue" ng-click="createOrder()">Opprett ordre</button>
             </div>
         </section>
         <section id="transactions-table" ng-if="hasOrders()">
@@ -71,10 +141,14 @@
                 <tbody>
                     <tr ng-repeat="order in user.orders">
                         <td>
-                            <p><strong>{{order.identifier}}</strong></p>
+                            <p>
+                                <strong>{{order.identifier}}</strong>
+                            </p>
                         </td>
                         <td>
-                            <p><strong>{{(order.payment_method_id === 1) ? "Netaxept" : "Faktura"}}</strong></p>
+                            <p>
+                                <strong>{{(order.payment_method_id === 1) ? "Netaxept" : "Faktura"}}</strong>
+                            </p>
                         </td>
                         <td>
                             <p>Varer: ({{order.products.length}})</p>

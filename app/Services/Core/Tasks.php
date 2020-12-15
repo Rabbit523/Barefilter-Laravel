@@ -2,39 +2,40 @@
 
 namespace App\Services\Core;
 
-use App\Models\Orders\Order;
-use App\Models\Core\User;
-use App\Models\Core\Task;
-use App\Services\Apis\Netaxept;
-use App\Services\Apis\Cargonizer;
-
-use App\Mail\Welcome;
-use App\Mail\UserSignedUp;
 use App\Mail\AutomaticAccount;
-use App\Mail\OrderPlaced;
-use App\Mail\OrderConfirmation;
-use App\Mail\OrderSubscriptionNotification;
 use App\Mail\Contact;
+use App\Mail\OrderConfirmation;
+use App\Mail\TransferOrderConfirmation;
+use App\Mail\OrderPlaced;
+use App\Mail\OrderSubscriptionNotification;
 use App\Mail\TechnicalService;
-
+use App\Mail\UserSignedUp;
+use App\Mail\Welcome;
+use App\Models\Core\Task;
+use App\Models\Core\User;
+use App\Models\Orders\Order;
+use App\Services\Apis\Cargonizer;
+use App\Services\Apis\Netaxept;
 use Illuminate\Support\Facades\Mail;
 
 class Tasks
 {
     private static $recipients = ["ordre@barefilter.no", "egy6443rw7tn28@print.epsonconnect.com"];
-    private static $bcc = ["nohman@fantasylab.no"];
-
+    private static $bcc = ["nohman@fantasylab.io"];
+    // private static $recipients = ["aleksei@fantasylab.io"];
+    private static $trustpilot_bcc = ["nohman@fantasylab.io", "3582327f1c@invite.trustpilot.com"];
     /*private static $recipients = ["rau@rauxmedia.com", "tatiana.ibanez@rauxmedia.com"];
-    private static $bcc = ["projects@rauxmedia.com"];*/
+    private static $bcc = ["projects@rauxmedia.com"];
+    , "3582327f1c@invite.trustpilot.com"
+     */
 
-    
     public static function execute()
     {
         $tasks = Task::where('executed', false)
             ->take(5)
             ->get();
 
-            $arr = array();
+        $arr = array();
         foreach ($tasks as $task) {
             array_push($arr, self::run($task));
         }
@@ -46,10 +47,9 @@ class Tasks
         return Task::create([
             "executed" => false,
             "type_id" => $type,
-            "properties" => json_encode($properties)
+            "properties" => json_encode($properties),
         ]);
     }
-
 
     private static function run($task)
     {
@@ -60,6 +60,9 @@ class Tasks
                 break;
             case Task::$orderConfirmationEmail:
                 $response = self::sendOrderConfirmationEmail($task);
+                break;
+            case Task::$transferOrderConfirmationEmail:
+                $response = self::sendTransferOrderConfirmationEmail($task);
                 break;
             case Task::$automaticSignUpEmail:
                 $response = self::sendAutomaticSignUpEmail($task);
@@ -79,7 +82,6 @@ class Tasks
             case Task::$automateCargonizer:
                 $response = self::automateCargonizer($task);
                 break;
-
             case Task::$contact:
                 $response = self::contact($task);
                 break;
@@ -129,10 +131,24 @@ class Tasks
         $order = Order::where('id', $task->properties->order_id)
             ->with(["shipping", "billing", "products.product", "products.subscription", "user"])
             ->first();
-        if($order !== null){
+        if ($order !== null) {
             Mail::to($order->user->email)
-            ->bcc(self::$bcc)
-            ->send(new OrderConfirmation($order));
+                ->bcc(self::$trustpilot_bcc)
+                ->send(new OrderConfirmation($order));
+        }
+        $task->executed = true;
+        $task->save();
+        return $task;
+    }
+
+    private static function sendTransferOrderConfirmationEmail($task)
+    {
+        $order = Order::where('id', $task->properties->order_id)
+            ->with(["shipping", "billing", "products.product", "products.subscription", "user"])
+            ->first();
+        if ($order !== null) {
+            Mail::to($order->user->email)
+                ->send(new TransferOrderConfirmation($order));
         }
         $task->executed = true;
         $task->save();
@@ -145,7 +161,7 @@ class Tasks
         $order = Order::where('id', $task->properties->order_id)
             ->with(["shipping", "billing", "products.product", "products.subscription", "user"])
             ->first();
-        if($order !== null){
+        if ($order !== null) {
             Mail::to(self::$recipients)
                 ->bcc(self::$bcc)
                 ->send(new OrderPlaced($admin, $order));
@@ -161,22 +177,20 @@ class Tasks
         $order = Order::where('id', $task->properties->order_id)
             ->with(["shipping", "billing", "products.product", "products.subscription", "user"])
             ->first();
-        if($order !== null){
+        if ($order !== null) {
             Mail::to(self::$recipients)
-            ->bcc(self::$bcc)
-            ->send(new OrderSubscriptionNotification($admin, $order));
+                ->bcc(self::$bcc)
+                ->send(new OrderSubscriptionNotification($admin, $order));
         }
         $task->executed = true;
         $task->save();
         return $task;
     }
 
-
     private static function automateNetaxept($task)
     {
         $result = Netaxept::automate($task->properties->order_id);
-        if($result)
-        {
+        if ($result) {
             $task->executed = true;
             $task->save();
         }

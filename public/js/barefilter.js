@@ -3,7 +3,6 @@ var API, Controllers = {}, Services = {};
 API = function () {
     var request = function (type, endpoint, data, callback, rootUrl) {
         var url = (rootUrl !== undefined) ? rootUrl + endpoint : config.server + endpoint;
-        console.log(url);
         $.ajax({
             type: type,
             url: url,
@@ -540,10 +539,13 @@ Controllers.Contact = function () {
     var send = function (e) {
         e.preventDefault();
         if ($(form).valid()) {
-            $(form + ' #send-message').hide();
+            $(form + ' #send-message').hide(); 
+            return;
             Barefilter.API.contact(getData(), function (response) {
                 if (response.success) {
-                    $("#feedback").show();
+                    $(".success-msj").style('display: block;');
+                } else {
+
                 }
             });
         }

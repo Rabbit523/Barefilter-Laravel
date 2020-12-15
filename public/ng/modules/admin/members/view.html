@@ -1,7 +1,7 @@
 <div class="transactions-history" ng-class="{'loading': loading}">
     <div class="transactions-title">
         <h1>Kunder</h1>
-        <input class="form-control" type="text" placeholder="Søk etter fornavn, etternavn eller e-postadresse" ng-model="searchQuery">
+        <input class="form-control" type="text" placeholder="Søk etter fornavn, etternavn eller e-postadresse" ng-model="searchQuery" ng-keyup="$event.keyCode == 13 ? triggerSearch() : null">
     </div>
 
     <div class="transactions-body">

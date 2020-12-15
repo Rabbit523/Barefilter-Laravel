@@ -10,6 +10,49 @@
   font-family: "Roboto", sans-serif;
   background-color: #F1F2F4;
 }
+.barefilter footer .trygg-certificate {
+  display: table;
+  margin-left: auto;
+  margin-right: auto;
+  padding-top: 20px;
+}
+.barefilter footer .trygg-certificate .trygg-certificate-box {
+  top: -150px;
+  opacity: 0;
+  transition: opacity 0.5s linear;
+}
+.barefilter footer .trygg-certificate:hover .trygg-certificate-box {
+  opacity: 1;
+}
+@media only screen and (max-width: 480px) {
+  .barefilter footer .trygg-certificate .trygg-certificate-box {
+    top: -250px;
+    left: -50px;
+  }
+  .bring-logo {
+    padding-top: 15px;
+    text-align: center;
+  }
+  .bring-servicepakke {
+    padding-left: 30px;
+  }
+}
+.barefilter .barefilter-product .product-description .trygg-certificate {
+  float: right;
+}
+.barefilter .barefilter-product .product-description .trygg-certificate .trygg-certificate-box {
+  opacity: 0;
+  transition: opacity 0.5s linear;
+  left: -200px;
+  top: -150px;
+}
+.barefilter .barefilter-product .product-description .trygg-certificate:hover .trygg-certificate-box {
+  opacity: 1;
+}
+.list-inline>li {
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
 /* line 3, ../sass/barefilter/shared/_header.scss */
 .barefilter header .notification-bar {
   width: 100%;
@@ -31,6 +74,11 @@
   padding-top: 10px;
   color: white;
   font-size: 12px;
+}
+@media only screen and (max-width: 768px) {
+  .barefilter header .top-menu {
+    min-height: 0px;
+  }
 }
 /* line 21, ../sass/barefilter/shared/_header.scss */
 .barefilter header .top-menu ul {
@@ -58,7 +106,12 @@
   background: white;
   padding: 25px 0;
 }
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 768px) {
+  .barefilter header .top-menu p {
+    font-size: 11px;
+  }
+}
+@media only screen and (max-width: 768px) {
   /* line 40, ../sass/barefilter/shared/_header.scss */
   .barefilter header .bottom-menu {
     padding-bottom: 0;
@@ -84,6 +137,11 @@
   .barefilter header .bottom-menu .company-logo img {
     position: absolute;
     left: 10px;
+    clip: rect(0px,230px,200px,0px);
+  }
+}
+@media only screen and (max-width: 480px) {
+  .barefilter header .bottom-menu .company-logo img {
     clip: rect(0px,60px,200px,0px);
   }
 }
@@ -116,10 +174,10 @@
 .barefilter header .bottom-menu .content .container-fluid .row #search-bar{
   margin-top: 20px;
 }
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 768px) {
   .barefilter header .bottom-menu .content .container-fluid .row #search-bar{
     margin-top: 0px;
-    background-color: rgb(37, 104, 174);
+    background-color: #2568ae;
   }
   .search-bar {
     margin-top: 13px;
@@ -137,7 +195,7 @@
   font-size: 14px;
   border: 1px solid #bdbdbd;
 }
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 768px) {
   /* line 65, ../sass/barefilter/shared/_header.scss */
   #search-bar {
     box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16), 0 2px 10px 0 rgba(0,0,0,0.12)
@@ -197,7 +255,7 @@
 .barefilter header .bottom-menu .header-links .header-link img {
   float: left;
 }
-@media only screen and (min-width: 480px) {
+@media only screen and (min-width: 481px) {
   .barefilter header .bottom-menu .header-links .header-link div, .barefilter header .bottom-menu .header-links .header-link span {
     float: left;
   }
@@ -289,13 +347,13 @@
 .barefilter header .bottom-menu .header-links .header-link:hover .information h3 {
   color: #1D539E;
 }
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 768px) {
   .navbar {
     min-height: 0px;
     border: none;
   }
 }
-@media only screen and (max-width: 1200px) {
+@media only screen and (max-width: 1440px) {
   /* line 176, ../sass/barefilter/shared/_header.scss */
   .barefilter .navbar-header {
     float: left;
@@ -334,12 +392,19 @@
   }
   /* line 200, ../sass/barefilter/shared/_header.scss */
   .barefilter .navbar-nav > li {
-    float: none;
+    /* float: none; */
   }
   /* line 203, ../sass/barefilter/shared/_header.scss */
   .barefilter .navbar-nav > li > a {
-    padding-top: 10px;
-    padding-bottom: 10px;
+    padding-top: 10px!important;
+    padding-bottom: 10px!important;
+    padding-left: 5px!important;
+    padding-right: 5px!important;
+  }
+  .barefilter .barefilter-navigation.navbar .navbar-collapse .navbar-nav > li > a {
+    line-height: 30px!important;
+    font-size: 13px;
+    height: 40px!important;
   }
   /* line 207, ../sass/barefilter/shared/_header.scss */
   .barefilter .collapse.in {
@@ -380,6 +445,11 @@
   margin-bottom: 0px;
   border-radius: 0px;
   border-color: transparent;
+}
+@media only screen and (max-width: 768px) {
+  .barefilter .barefilter-navigation.navbar {
+    width: 99%;
+  }
 }
 /* line 26, ../sass/barefilter/shared/_navigation.scss */
 .barefilter .barefilter-navigation.navbar .navbar-collapse {
@@ -481,7 +551,7 @@
   .barefilter .barefilter-product .row.info p {
     font-size: 10px;
     margin-left: 2px!important;
-    width: 65%!important;
+    width: 80%!important;
   }
   .barefilter .barefilter-product .row.info {
     margin-left: -15px!important;
@@ -515,6 +585,9 @@
   padding: 285px 0 35px 0;
   background-position: 0px -95px;
 }
+.barefilter footer .bottom-footer {
+  height: 230px;
+}
 @media only screen and (max-width: 480px) {
   /* line 1, ../sass/barefilter/shared/_footer.scss */
   .barefilter footer {
@@ -546,6 +619,23 @@
     padding: 50px 0;
     min-height: 0px;
   }
+  .barefilter .barefilter-product .service-title {
+    float: left;
+    width: 70%;
+    font-size: 12px!important;
+  }
+  .barefilter .barefilter-product .service-title+p {
+    width: 70%;
+  }
+  .barefilter .barefilter-product .service-title-shipping {
+    float: left;
+    width: 60%;
+    font-size: 12px!important;
+    margin-top: 10px!important;
+  }
+  .barefilter .barefilter-product .service-title-shipping + p {
+    width: 65%;
+  }
 }
 /* line 17, ../sass/barefilter/shared/_footer.scss */
 .barefilter footer h3, .barefilter footer h4 {
@@ -570,8 +660,61 @@
   color: #000;
   margin-top: 40px;
 }
+.barefilter .barefilter-customer-service .trustpilot-widget {
+  margin: 20px 0px 40px 0px;
+  padding: 20px 0px;
+  background: white;
+}
+.barefilter .barefilter-subscription .barefilter-customer-service .trustpilot-widget {
+  margin-top: 40px;
+  margin-bottom: 20px;
+}
+
+.barefilter .trustpilot-widget {
+  margin-right: 80px;
+  margin-top: 15px;
+}
+.barefilter-store-industry .trustpilot-widget {
+  margin: 30px 0px 5px 0px;
+}
+.barefilter-product .trustpilot-widget {
+  margin: 10px 0px 10px 0px;
+}
+@media only screen and (max-width: 1450px) {
+  .barefilter .trustpilot-widget {
+    margin-right: 20px;
+  }
+  .barefilter .barefilter-product .trustpilot-widget {
+    margin-right: 0px;
+  }
+}
+@media only screen and (max-width: 1280px) {
+  .barefilter .trustpilot-widget {
+    margin-right: 0px;
+    margin-top: 0px;
+    width: 256px;
+  }
+  .barefilter .barefilter-product .trustpilot-widget {
+    width: auto;
+  }
+  .barefilter .barefilter-store-industry .trustpilot-widget {
+    margin-top: 20px;
+    width: auto;
+  }
+  .barefilter .barefilter-subscription .barefilter-customer-service .trustpilot-widget {
+    width: auto;
+  }
+  .barefilter .barefilter-customer-service .trustpilot-widget {
+    width: auto;
+  }
+}
 .barefilter footer .bottom-footer .copyright p.text-mobile {
   display: none;
+}
+@media only screen and (max-width: 768px) {
+  .barefilter footer .bottom-footer .copyright {
+    margin-top: 53px;
+  }
 }
 @media only screen and (max-width: 480px) {
   .barefilter footer .bottom-footer .copyright {
@@ -903,6 +1046,11 @@
   margin: 0 auto;
   pointer-events: all;
 }
+@media only screen and (max-width: 1200px) {
+  .barefilter .modal-content {
+    width: 95%;
+  }
+}
 /* line 1, ../sass/barefilter/shared/_jumbotron.scss */
 .barefilter .barefilter-jumbotron {
   height: 380px;
@@ -955,6 +1103,11 @@
 }
 .barefilter-store-industry .overlay h1 {
   display: inherit;
+}
+@media only screen and (max-width: 768px) {
+  .barefilter .barefilter-jumbotron img {
+    height: 285px;
+  }
 }
 @media only screen and (max-width: 480px) {
   /* line 15, ../sass/barefilter/shared/_jumbotron.scss */
@@ -1012,6 +1165,11 @@
     height: 260px;
   }
 }
+@media only screen and (max-width: 768px) {
+  .barefilter .barefilter-jumbotron .overlay {
+    height: 285px;
+  }
+}
 @media only screen and (max-width: 480px) {
   /* line 22, ../sass/barefilter/shared/_jumbotron.scss */
   .barefilter .barefilter-jumbotron .overlay {
@@ -1028,7 +1186,7 @@
 @media only screen and (max-width: 1440px) {
   /* line 39, ../sass/barefilter/shared/_jumbotron.scss */
   .barefilter .barefilter-jumbotron .overlay .overlay-content {
-    padding: 25px;
+    padding: 15px;
   }
 }
 @media only screen and (max-width: 480px) {
@@ -1338,7 +1496,13 @@
 /* line 33, ../sass/barefilter/shared/_modals.scss */
 .barefilter #transfer-to-subscription-modal .modal-body .transfer-description {
   background: #EBECEE;
-  padding: 40px;
+  padding: 40px 30px;
+}
+.barefilter #transfer-to-subscription-modal .modal-body .transfer-description .cost p{
+  color: #1d539e;
+  font-weight: bold;
+  font-size: 16px;
+  padding-top: 10px;
 }
 /* line 37, ../sass/barefilter/shared/_modals.scss */
 .barefilter #transfer-to-subscription-modal .modal-body .transfer-description .transfer-title h1, .barefilter #transfer-to-subscription-modal .modal-body .transfer-description .transfer-title h2, .barefilter #transfer-to-subscription-modal .modal-body .transfer-description .transfer-title h3 {
@@ -1355,7 +1519,7 @@
 /* line 47, ../sass/barefilter/shared/_modals.scss */
 .barefilter #transfer-to-subscription-modal .modal-body .transfer-description .transfer-title h1 {
   color: #1D539E;
-  font-size: 34px;
+  font-size: 40px;
   margin-top: 10px;
 }
 /* line 52, ../sass/barefilter/shared/_modals.scss */
@@ -1364,13 +1528,14 @@
   font-family: "Roboto", sans-serif;
   font-size: 18px;
   letter-spacing: 0;
+  font-weight: bold;
 }
 /* line 59, ../sass/barefilter/shared/_modals.scss */
 .barefilter #transfer-to-subscription-modal .modal-body .transfer-description hr {
   border-top: 2px solid lightgray;
 }
 /* line 63, ../sass/barefilter/shared/_modals.scss */
-.barefilter #transfer-to-subscription-modal .modal-body .transfer-description > section h2 {
+.barefilter #transfer-to-subscription-modal .modal-body .transfer-description > .subscription h2 {
   color: #32AEE3;
   font-size: 14px;
   font-family: "Roboto", sans-serif;
@@ -1462,6 +1627,8 @@
 /* line 144, ../sass/barefilter/shared/_modals.scss */
 .barefilter #product-quick-view-modal .modal-body .product-description .product-title {
   opacity: 1;
+  display: table;
+  width: 100%;
 }
 /* line 146, ../sass/barefilter/shared/_modals.scss */
 .barefilter #product-quick-view-modal .modal-body .product-description .product-title h1, .barefilter #product-quick-view-modal .modal-body .product-description .product-title h2, .barefilter #product-quick-view-modal .modal-body .product-description .product-title h3 {
@@ -1633,7 +1800,7 @@
 }
 /* line 303, ../sass/barefilter/shared/_modals.scss */
 .barefilter #product-added-to-cart .modal-body .hold-content thead tr td {
-  padding: 25px;
+  padding: 20px;
   font-size: 12px;
   font-weight: 700;
   border-right: 1px solid #c1c1c1;
@@ -2374,7 +2541,7 @@
   color: white;
   text-transform: uppercase;
   background: #16417E;
-  padding: 15px 20px;
+  padding: 15px 17px;
   font-size: 14px;
   margin-bottom: 0;
 }
@@ -2656,7 +2823,7 @@
 /* line 46, ../sass/barefilter/online-store/_product.scss */
 .barefilter .barefilter-product .product-summary p {
   color: black;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: light;
 }
 /* line 51, ../sass/barefilter/online-store/_product.scss */
@@ -2665,13 +2832,34 @@
   font-size: 24px;
   color: #32AEE3;
 }
+.notification-padding {
+  padding-top: 0px;
+}
+@media only screen and (max-width: 480px) {
+  .notification-padding {
+    padding-top: 30px;
+  }
+}
+@media only screen and (max-width: 1280px) {
+  .barefilter .barefilter-product .product-summary .price {
+    padding: 0px 0;
+    font-size: 15px;
+  }
+  hr {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  .barefilter .barefilter-product .product-summary {
+    padding: 20px;
+  }
+}
 /* line 57, ../sass/barefilter/online-store/_product.scss */
 .barefilter .barefilter-product .product-summary .product-description h1 {
-  font-size: 34px;
+  font-size: 20px;
 }
 /* line 60, ../sass/barefilter/online-store/_product.scss */
 .barefilter .barefilter-product .product-summary .product-description h2 {
-  font-size: 24px;
+  font-size: 15px;
   color: #757575;
 }
 /* line 66, ../sass/barefilter/online-store/_product.scss */
@@ -2721,6 +2909,14 @@
   }
   .barefilter .barefilter-product .more-products {
     width: 100%!important;
+  }
+}
+@media only screen and (max-width: 1200px) {
+  .barefilter .barefilter-product .product-summary .add-to-cart button {
+    margin: 51px 0;
+  }
+  .barefilter .barefilter-btn {
+    padding: 11px 10px;
   }
 }
 .disabled {
@@ -3049,11 +3245,11 @@
 /* line 52, ../sass/barefilter/_cart.scss */
 .barefilter .barefilter-cart #barefilter-cart-products tbody tr td.product div p, .barefilter .barefilter-cart #barefilter-payment-methods tbody tr td.product div p {
   color: #1D539E;
-  font-size: 16px;
+  font-size: 13px;
 }
 /* line 57, ../sass/barefilter/_cart.scss */
 .barefilter .barefilter-cart #barefilter-cart-products tbody tr td.product div span, .barefilter .barefilter-cart #barefilter-payment-methods tbody tr td.product div span {
-  font-size: 14px;
+  font-size: 12px;
   color: gray;
 }
 /* line 64, ../sass/barefilter/_cart.scss */
@@ -3155,7 +3351,7 @@
   padding: 15px 15px 5px 25px;
   font-family: "Roboto", sans-serif;
   letter-spacing: 0;
-  font-size: 16px;
+  font-size: 14px;
   margin: 0px;
 }
 
@@ -3215,6 +3411,8 @@
 .barefilter .barefilter-cart .checkout-information > section#information .checkout-section-content {
   padding: 40px 0;
   height: 450px;
+  display: table;
+  width: 100%;
 }
 @media only screen and (max-width: 480px) {
   /* line 156, ../sass/barefilter/_cart.scss */
@@ -3346,6 +3544,11 @@
   margin: 20px 0px;
   font-size: 14px;
   font-weight: normal;
+}
+@media only screen and (max-width: 1023px) {
+  .barefilter .barefilter-cart .checkout-information > section#confirmation .checkout-section-content label {
+    width: 35%;
+  }
 }
 @media only screen and (max-width: 480px) {
   /* line 260, ../sass/barefilter/_cart.scss */
@@ -5246,10 +5449,10 @@
 @media only screen and (max-width: 768px) {
   /* line 65, ../sass/barefilter/_search-results.scss */
   .barefilter .barefilter-search-results .barefilter-jumbotron {
-    height: 400px;
+    height: 285px;
   }
 }
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 480px) {F.barefilter .barefilter-search-results .barefilter-jumbotron .overlay
   /* line 65, ../sass/barefilter/_search-results.scss */
   .barefilter .barefilter-search-results .barefilter-jumbotron {
     height: 500px;
@@ -5269,7 +5472,7 @@
 @media only screen and (max-width: 768px) {
   /* line 80, ../sass/barefilter/_search-results.scss */
   .barefilter .barefilter-search-results .barefilter-jumbotron .overlay {
-    height: 400px;
+    height: 285px;
   }
 }
 @media only screen and (max-width: 480px) {
@@ -5313,7 +5516,7 @@
 @media only screen and (max-width: 768px) {
   /* line 107, ../sass/barefilter/_search-results.scss */
   .barefilter .barefilter-search-results .barefilter-jumbotron .overlay .overlay-content .search-bar input {
-    width: 100%;
+    /* width: 100%; */
   }
 }
 /* line 116, ../sass/barefilter/_search-results.scss */
@@ -5364,6 +5567,9 @@
 .barefilter .barefilter-search-results .rwd-table tr {
   border-color: #bdbdbd;
   border-right: 1px solid #bdbdbd;
+}
+@media only screen and (max-width: 480px) {
+
 }
 /* line 159, ../sass/barefilter/_search-results.scss */
 .barefilter .barefilter-search-results .rwd-table th, .barefilter .barefilter-search-results .rwd-table td {
@@ -5889,7 +6095,7 @@ barefilter .barefilter-product .product-gallery .page-control .sl-prev {
   margin: 30px 10px;
   position: relative;
 }
-@media only screen and (min-width: 480px) {
+@media only screen and (min-width: 769px) {
 #btn-menu-2 {
   display: none;
 }
@@ -5900,17 +6106,17 @@ barefilter .barefilter-product .product-gallery .page-control .sl-prev {
   display: none!important;
 }
 #bs-example-navbar-collapse-1 {
-  display: show!important;
+  display: block!important;
 }
 }
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 768px) {
 
   .barefilter .barefilter-product .product-gallery {
     width: 100%;
     height: 400px;
   }
   .modal-body .hold-content .col-xs-12 {
-    padding-top: 30px;
+    padding-top: 0px;
   }
   .barefilter #product-added-to-cart .modal-body .hold-content .cart-successful {
     background-color: white!important;
@@ -6100,9 +6306,7 @@ table {
   padding-right: 15px;
   font-size: 5px!important;
 }
-#btn-menu-2 {
-  display: show!important;
-}
+
 #btn-menu-1 {
   display: none!important;
 }
@@ -6111,6 +6315,9 @@ table {
 }
 #bs-example-navbar-collapse-2 {
   display: show!important;
+  position: absolute;
+  z-index: 3;
+  box-shadow: 6px 1px 5px 0 rgba(0,0,0,0.16), 8px -2px 10px 0 rgba(0,0,0,0.12);
 }
 .filter-categories {
   display: none;

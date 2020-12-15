@@ -26,6 +26,7 @@ class Task extends Model
     // system
     public static $automateNetaxept = 10;
     public static $automateCargonizer = 11;
+    public static $transferOrderConfirmationEmail = 12;
 
 
     // misc

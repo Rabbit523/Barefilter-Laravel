@@ -16,7 +16,7 @@ $shouldRender = (Auth::check()) ? (Auth::user()->role_id === 3 || $page !== "das
                 <span class="icon-bar"></span>
             </button>
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-2"
-                aria-expanded="false" id="btn-menu-">
+                aria-expanded="false" id="btn-menu-2">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
@@ -87,7 +87,7 @@ $shouldRender = (Auth::check()) ? (Auth::user()->role_id === 3 || $page !== "das
             </ul>
         </div>
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-        <ul class="nav navbar-nav">
+        <ul class="nav navbar-nav" style="width: 100%;">
                 @auth
                 <li class="<?= ($page === "dashboard") ? "active" : "" ?>">
                     <a href="{{url('/dashboard')}}">Min Side
@@ -138,6 +138,13 @@ $shouldRender = (Auth::check()) ? (Auth::user()->role_id === 3 || $page !== "das
                 </li>
                 <li>
                     <a href="https://www.facebook.com/barefilter/" target="_blank">Facebook </a>
+                </li>
+                <li style="float: right;">
+                    <!-- TrustBox widget - Micro Combo -->
+                    <div class="trustpilot-widget" data-locale="nb-NO" data-template-id="5419b6ffb0d04a076446a9af" data-businessunit-id="5addc3555573e100014f796a" data-style-height="50px" data-style-width="100%" data-theme="dark">
+                    <a href="https://no.trustpilot.com/review/barefilter.no" target="_blank">Trustpilot</a>
+                    </div>
+                    <!-- End TrustBox widget -->
                 </li>
             </ul>
         </div>

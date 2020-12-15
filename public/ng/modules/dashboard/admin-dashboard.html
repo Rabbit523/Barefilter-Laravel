@@ -41,28 +41,28 @@
                     </div>
                     <div class="subscription-overview">
                         <div>{{one_time  | number}}</div>
-                        <div>filterpakker kjøpt</div>
+                        <div>Filterpakker totalt</div>
                     </div>
                     <div class="subscription-overview">
                         <div>{{disposal | number}}</div>
-                        <div>filter på en gang kjøpt</div>
+                        <div>Engangskjøp</div>
                     </div>
                     <div class="subscription-overview">
                         <div>{{aggregates.total_subscriptions | number}}</div>
-                        <div>totale abonnementer</div>
+                        <div>Totale abonnementer</div>
                     </div>
                     <div class="subscription-overview">
                         <div>{{aggregates.total_onetime_subscriptions | number}}</div>
-                        <div>totalt en abonnementer</div>
+                        <div>Levering 1 gang i året</div>
                     </div>
                     <div class="subscription-overview">
                         <div>{{aggregates.total_twotime_subscriptions | number}}</div>
-                        <div>totalt to abonnementer</div>
+                        <div>Levering 2 ganger i året</div>
                     </div>
                     <div class="subscription-overview">
                         <div>{{aggregates.total_onetime_subscriptions + aggregates.total_twotime_subscriptions - aggregates.total_subscriptions
                             | number}}</div>
-                        <div>slettede abonnementer</div>
+                        <div>Slettede abonnementer</div>
                     </div>
                 </div>
                 <div class="col-sm-9 text-center">
@@ -92,20 +92,20 @@
                         <td style="width: 10%;">Bilde</td>
                         <td style="width: 30%;">Produktnavn</td>
                         <td style="width: 10%;">Filter til</td>
-                        <td style="width: 10%;">Kategori</td>
+                        <td style="width: 20%;">Kategori</td>
                         <td style="width: 10%;">Totalt solgt</td>
                     </tr>
                 </thead>
                 <tbody>
                     <tr ng-repeat="item in subscriptions">
-                        <td>{{item.sku}}</td>
+                        <td>{{item.order_product.product.sku}}</td>
                         <td>
-                            <img ng-src="https://barefilter.no/assets/uploads/products/{{item.product_id}}/{{item.uri}}" alt='product preview image' width="80" />
+                            <img ng-src="{{item.order_product.product.images[0].url}}" alt='product preview image' width="80" />
                         </td>
-                        <td>{{item.product_name}}</td>
-                        <td ng-if="item.type_id==1">Enebolig</td>
-                        <td ng-if="item.type_id==2">Industribygg</td>
-                        <td>{{item.category_name}}</td>
+                        <td>{{item.order_product.product.name}}</td>
+                        <td ng-if="item.order_product.product.category.type_id==1">Enebolig</td>
+                        <td ng-if="item.order_product.product.category.type_id==2">Industribygg</td>
+                        <td>{{item.order_product.product.category.name}}</td>
                         <td>{{item.total | number}} stk.</td>
                     </tr>
 
@@ -121,7 +121,7 @@
                         <td style="width: 10%;">Bilde</td>
                         <td style="width: 30%;">Produktnavn</td>
                         <td style="width: 10%;">Filter til</td>
-                        <td style="width: 10%;">Kategori</td>
+                        <td style="width: 20%;">Kategori</td>
                         <td style="width: 10%;">Totalt solgt</td>
                     </tr>
                 </thead>
